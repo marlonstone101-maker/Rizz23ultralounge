@@ -101,15 +101,16 @@
       letter-spacing: 3px;
     }
 
-.brand-subscript {
-  display: inline-block;
-  font-size: 0.7em;
-  transform: translateY(5px);
-  line-height: 1;
-  background: var(--gold-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+    .brand-subscript {
+      display: inline-block;
+      font-size: 0.7em;
+      transform: translateY(5px);
+      line-height: 1;
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
     nav {
       display: flex;
       gap: 2rem;
@@ -633,8 +634,7 @@
   <header>
     <a href="#" class="logo-container">
       <img src="logo.png" alt="Rizz23 Logo" class="logo-img">
-      <!-- AFTER -->
-<span class="brand-name gold-text">RIZZ<span class="brand-subscript">23</span></span>
+      <span class="brand-name gold-text">RIZZ<span class="brand-subscript">23</span></span>
     </a>
     <nav>
       <a href="#dining">Dining</a>
@@ -643,7 +643,7 @@
     </nav>
     <div class="nav-actions">
       <button class="btn-admin-toggle" onclick="openAdminModal()">Rizz23 Admin</button>
-      <a href="#" id="vip-header-btn" class="btn-gold" target="_blank">Reserve Table</a>
+      <a href="#menu" id="vip-header-btn" class="btn-gold">Order & Pay Online</a>
     </div>
   </header>
 
@@ -653,7 +653,7 @@
     <h1 class="gold-text">Rizz23 Ultra Lounge</h1>
     <p>An exquisite culinary journey featuring artisanal breakfast, prime lunch cuts, luxury dinners, and high-energy VIP lounge experiences.</p>
     <div class="hero-actions">
-      <a href="#menu" class="btn-gold">Explore Menu</a>
+      <a href="#menu" class="btn-gold">Explore & Pay Online</a>
       <a href="#events" class="btn-outline">Book Private Event</a>
     </div>
   </section>
@@ -681,7 +681,7 @@
   <!-- Dynamic Menu Section -->
   <section class="menu-container" id="menu">
     <h2 class="section-title gold-text">Curated Culinary Menu</h2>
-    <p class="section-subtitle">Select a category below to view our gourmet offerings</p>
+    <p class="section-subtitle">Select an item below to place your order and complete secure payment</p>
 
     <!-- Interactive Filter Buttons -->
     <div class="filter-container" id="filter-buttons">
@@ -716,13 +716,17 @@
         </div>
       </div>
 
-      <!-- WhatsApp Event Booking Form -->
+      <!-- Card Payment Event Booking Form -->
       <div class="booking-form-card">
         <h3 class="gold-text" style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 1.5rem; text-align: center;">Book An Event</h3>
         <form id="event-booking-form" onsubmit="handleEventBooking(event)">
           <div class="form-group">
             <label for="guest-name">Your Full Name</label>
             <input type="text" id="guest-name" class="form-control" placeholder="e.g. John Jones" required />
+          </div>
+          <div class="form-group">
+            <label for="guest-phone">Phone Number</label>
+            <input type="tel" id="guest-phone" class="form-control" placeholder="e.g. 876-555-0199" required />
           </div>
           <div class="form-group">
             <label for="event-type">Event Type</label>
@@ -747,11 +751,47 @@
             <label for="event-notes">Special Requests / Notes</label>
             <textarea id="event-notes" class="form-control" rows="3" placeholder="Champagne requests, custom cake setup, music preferences..."></textarea>
           </div>
-          <button type="submit" class="btn-gold" style="width: 100%; text-align: center; border-radius: 6px;">Submit Reservation via WhatsApp</button>
+          <button type="submit" class="btn-gold" style="width: 100%; text-align: center; border-radius: 6px;">Pay Deposit & Reserve Card</button>
         </form>
       </div>
     </div>
   </section>
+
+  <!-- Payment Modal Overlay -->
+  <div class="modal-overlay" id="payment-modal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closePaymentModal()">&times;</button>
+      <h3 class="gold-text" style="font-family: var(--font-heading); font-size: 1.6rem; margin-bottom: 1.5rem; text-align: center;">Card Checkout</h3>
+      
+      <form id="card-checkout-form" onsubmit="processCardPayment(event)">
+        <input type="hidden" id="pay-item-name" />
+        <input type="hidden" id="pay-item-price" />
+
+        <div style="margin-bottom: 1.5rem; background: #000; padding: 1rem; border-radius: 6px; border: 1px solid var(--border-gold);">
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Selected Item/Service:</p>
+          <p id="checkout-summary-name" style="font-weight: 600; color: #fff;"></p>
+          <p id="checkout-summary-price" style="font-size: 1.2rem; font-weight: 700; color: var(--gold-primary); margin-top: 0.2rem;"></p>
+        </div>
+
+        <div class="form-group">
+          <label>Full Name on Card</label>
+          <input type="text" id="card-name" class="form-control" placeholder="John Doe" required />
+        </div>
+        
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="card-email" class="form-control" placeholder="john@example.com" required />
+        </div>
+
+        <div class="form-group">
+          <label>Table Number or Address</label>
+          <input type="text" id="delivery-info" class="form-control" placeholder="Table #5 / Pickup / Delivery Address" required />
+        </div>
+
+        <button type="submit" class="btn-gold" style="width: 100%; border-radius: 6px; margin-top: 1rem;">Proceed to Pay with Debit/Credit Card</button>
+      </form>
+    </div>
+  </div>
 
   <!-- Client Admin Portal Modal -->
   <div class="modal-overlay" id="admin-modal">
@@ -811,6 +851,9 @@
 
   <!-- Application Logic -->
   <script>
+    const WIPAY_ACCOUNT_ID = "YOUR_WIPAY_ACCOUNT_ID"; 
+    const WIPAY_ENVIRONMENT = "live"; 
+
     const firebaseConfig = {
       apiKey: "AIzaSyBfR1RxhxovoVCCTWVfWdp4lTcyiNB4akQ",
       authDomain: "rizz23-79b31.firebaseapp.com",
@@ -825,15 +868,11 @@
     const db = firebase.firestore();
     const auth = firebase.auth();
 
-    const WHATSAPP_NUMBER = "18762252525";
     window.isAdminLoggedIn = false;
     let uploadedBase64Image = "";
     let currentMenuItems = [];
 
     function initApp() {
-      document.getElementById("vip-header-btn").href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hello Rizz23 Ultra Lounge, I would like to reserve a table.")}`;
-      
-      // Real-time listener for Firestore menu items
       db.collection("menuItems").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
         currentMenuItems = [];
         snapshot.forEach((doc) => {
@@ -855,9 +894,6 @@
       }
 
       items.forEach(item => {
-        const orderText = `Hello Rizz23 Ultra Lounge, I would like to order: *${item.name}* (${item.price}).`;
-        const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(orderText)}`;
-
         const card = document.createElement("div");
         card.className = "menu-card";
         card.innerHTML = `
@@ -869,9 +905,9 @@
             </div>
             <p class="item-desc">${item.description}</p>
             <div class="card-actions">
-              <a href="${waLink}" target="_blank" style="text-decoration:none; flex:1;">
-                <button class="btn-order-item">Order via WhatsApp</button>
-              </a>
+              <button class="btn-order-item" onclick="openPaymentModal('${item.id}', '${item.name}', '${item.price}')">
+                ORDER
+              </button>
               ${window.isAdminLoggedIn ? `
                 <button class="btn-admin-action" onclick="changePrice('${item.id}')">Edit Price</button>
                 <button class="btn-admin-action btn-admin-delete" onclick="deleteMenuItem('${item.id}')">Delete</button>
@@ -881,6 +917,85 @@
         `;
         grid.appendChild(card);
       });
+    }
+
+    function openPaymentModal(id, name, price) {
+      document.getElementById("pay-item-name").value = name;
+      document.getElementById("pay-item-price").value = price;
+      document.getElementById("checkout-summary-name").innerText = name;
+      document.getElementById("checkout-summary-price").innerText = price;
+
+      const modal = document.getElementById("payment-modal");
+      modal.classList.add("active");
+      modal.style.display = "flex";
+    }
+
+    function closePaymentModal() {
+      const modal = document.getElementById("payment-modal");
+      modal.classList.remove("active");
+      modal.style.display = "none";
+    }
+
+    // DISPATCHES ORDER TO KITCHEN POS VIA BACKEND SERVER BEFORE PAYMENT REDIRECT
+    async function processCardPayment(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("card-name").value;
+      const email = document.getElementById("card-email").value;
+      const delivery = document.getElementById("delivery-info").value;
+      const itemName = document.getElementById("pay-item-name").value;
+      const priceRaw = document.getElementById("pay-item-price").value;
+
+      const amount = parseFloat(priceRaw.replace(/[^0-9.]/g, '')) || 0;
+
+      if (amount <= 0) {
+        alert("Invalid transaction amount.");
+        return;
+      }
+
+      try {
+        // 1. Send Order details directly to Node POS server API
+        const response = await fetch('http://localhost:3000/api/create-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            customerName: name,
+            customerEmail: email,
+            deliveryNotes: delivery,
+            itemName: itemName,
+            amount: amount
+          }),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          // 2. Log copy into Firestore DB for admin audit
+          await db.collection("orders").add({
+            customerName: name,
+            customerEmail: email,
+            tableOrAddress: delivery,
+            item: itemName,
+            price: priceRaw,
+            status: "Sent to Kitchen",
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          });
+
+          // 3. Close modal & redirect customer to WiPay checkout
+          closePaymentModal();
+          
+          const baseUrl = WIPAY_ENVIRONMENT === "live" 
+            ? "https://jm.wipayfinancial.com/plugins/payments/pay" 
+            : "https://sandbox.wipayfinancial.com/plugins/payments/pay";
+
+          window.location.href = `${baseUrl}?account_id=${WIPAY_ACCOUNT_ID}&total=${amount}&currency=JMD&name=${encodeURIComponent(itemName)}&customer_name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&note=${encodeURIComponent(delivery)}`;
+        } else {
+          alert("Error sending order to POS: " + result.error);
+        }
+      } catch (err) {
+        console.error("Order dispatch failed:", err);
+        alert("Network error: Failed to connect to POS server. Ensure 'node server.js' is running.");
+      }
     }
 
     function filterMenu(category) {
@@ -920,7 +1035,7 @@
         }
       }
 
-      const modal = document.getElementById("admin-modal") || document.getElementById("adminModal");
+      const modal = document.getElementById("admin-modal");
       if (modal) {
         modal.classList.add("active");
         modal.style.display = "flex";
@@ -928,55 +1043,51 @@
     }
 
     function closeAdminModal() {
-      const modal = document.getElementById("admin-modal") || document.getElementById("adminModal");
+      const modal = document.getElementById("admin-modal");
       if (modal) {
         modal.classList.remove("active");
         modal.style.display = "none";
       }
     }
 
-   function convertFileToBase64(fileInput) {
-  const file = fileInput.files[0];
-  if (!file) return;
+    function convertFileToBase64(fileInput) {
+      const file = fileInput.files[0];
+      if (!file) return;
 
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    const img = new Image();
-    img.onload = function () {
-      // 1. Set maximum width/height dimensions
-      const MAX_WIDTH = 800;
-      const MAX_HEIGHT = 800;
-      let width = img.width;
-      let height = img.height;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = new Image();
+        img.onload = function () {
+          const MAX_WIDTH = 800;
+          const MAX_HEIGHT = 800;
+          let width = img.width;
+          let height = img.height;
 
-      // 2. Calculate proportional dimensions
-      if (width > height) {
-        if (width > MAX_WIDTH) {
-          height *= MAX_WIDTH / width;
-          width = MAX_WIDTH;
-        }
-      } else {
-        if (height > MAX_HEIGHT) {
-          width *= MAX_HEIGHT / height;
-          height = MAX_HEIGHT;
-        }
-      }
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
 
-      // 3. Draw image onto canvas to resize
-      const canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = height;
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
 
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, width, height);
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+          uploadedBase64Image = canvas.toDataURL("image/jpeg", 0.7);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
 
-      // 4. Compress output to JPEG with 0.7 quality
-      uploadedBase64Image = canvas.toDataURL("image/jpeg", 0.7);
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
     async function handleAddNewItem(e) {
       e.preventDefault();
 
@@ -1037,20 +1148,12 @@
       e.preventDefault();
       
       const name = document.getElementById("guest-name").value;
+      const phone = document.getElementById("guest-phone").value;
       const type = document.getElementById("event-type").value;
       const date = document.getElementById("event-date").value;
       const guests = document.getElementById("event-guests").value;
-      const notes = document.getElementById("event-notes").value;
 
-      const message = `*NEW EVENT BOOKING REQUEST - RIZZ23*\n\n` +
-                      `👤 *Name:* ${name}\n` +
-                      `🎉 *Event Type:* ${type}\n` +
-                      `📅 *Date:* ${date}\n` +
-                      `👥 *Guests:* ${guests}\n` +
-                      `📝 *Notes/Requests:* ${notes || "None"}`;
-
-      const waURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-      window.open(waURL, "_blank");
+      openPaymentModal("EVENT_DEPOSIT", `${type} Reservation (${date})`, "$5000");
     }
   </script>
 </body>
