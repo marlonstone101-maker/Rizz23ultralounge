@@ -340,10 +340,11 @@
       font-weight: 600;
     }
 
+    /* Updated Compact Horizontal Menu Layout */
     .menu-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 2.2rem;
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+      gap: 1.5rem;
     }
 
     .menu-card {
@@ -353,41 +354,46 @@
       border-radius: 12px;
       overflow: hidden;
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      flex-direction: row;
+      align-items: center;
+      padding: 1rem;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .menu-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 12px 30px rgba(212, 175, 55, 0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.2);
       border-color: var(--border-gold-bright);
     }
 
     .menu-card-img {
-      width: 100%;
-      height: 220px;
+      width: 90px;
+      height: 90px;
+      min-width: 90px;
       object-fit: cover;
-      border-bottom: 1px solid var(--border-gold);
+      border-radius: 50%;
+      border: 2px solid var(--gold-primary);
+      margin-right: 1.2rem;
     }
 
     .menu-card-body {
-      padding: 1.6rem;
+      padding: 0;
       flex-grow: 1;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
     }
 
     .menu-header {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.3rem;
     }
 
     .item-title {
       font-family: var(--font-serif);
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       font-weight: 600;
       color: #fff;
     }
@@ -395,15 +401,15 @@
     .item-price {
       font-family: var(--font-heading);
       font-weight: 700;
-      font-size: 1.15rem;
+      font-size: 1rem;
       color: var(--gold-primary);
     }
 
     .item-desc {
       color: var(--text-muted);
-      font-size: 0.88rem;
-      margin-bottom: 1.5rem;
-      flex-grow: 1;
+      font-size: 0.8rem;
+      margin-bottom: 0.8rem;
+      line-height: 1.3;
     }
 
     .card-actions {
@@ -417,13 +423,13 @@
       background: transparent;
       border: 1px solid var(--gold-primary);
       color: var(--gold-primary);
-      padding: 0.8rem;
+      padding: 0.5rem;
       border-radius: 6px;
       font-weight: 600;
       cursor: pointer;
       text-transform: uppercase;
-      font-size: 0.78rem;
-      letter-spacing: 2px;
+      font-size: 0.75rem;
+      letter-spacing: 1.5px;
       transition: all 0.3s ease;
     }
 
@@ -437,7 +443,7 @@
       background: rgba(212, 175, 55, 0.1);
       border: 1px solid var(--border-gold);
       color: var(--gold-light);
-      padding: 0.5rem 0.8rem;
+      padding: 0.4rem 0.6rem;
       border-radius: 6px;
       font-size: 0.7rem;
       cursor: pointer;
@@ -625,6 +631,7 @@
       .nav-actions { width: 100%; justify-content: center; }
       .hero h1 { font-size: 2.2rem; }
       .event-card-types { grid-template-columns: 1fr; }
+      .menu-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -936,7 +943,6 @@
       modal.style.display = "none";
     }
 
-    // DISPATCHES ORDER TO KITCHEN POS VIA BACKEND SERVER BEFORE PAYMENT REDIRECT
     async function processCardPayment(e) {
       e.preventDefault();
 
@@ -954,7 +960,6 @@
       }
 
       try {
-        // 1. Send Order details directly to Node POS server API
         const response = await fetch('http://localhost:3000/api/create-order', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -970,7 +975,6 @@
         const result = await response.json();
 
         if (result.success) {
-          // 2. Log copy into Firestore DB for admin audit
           await db.collection("orders").add({
             customerName: name,
             customerEmail: email,
@@ -981,7 +985,6 @@
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
           });
 
-          // 3. Close modal & redirect customer to WiPay checkout
           closePaymentModal();
           
           const baseUrl = WIPAY_ENVIRONMENT === "live" 
