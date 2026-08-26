@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rizz23 Ultra Lounge | Fine Dining & VIP Experience</title>
   
-  <!-- Fonts: Cinzel, Cormorant Garamond, Montserrat -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -794,13 +794,13 @@
     <p style="margin-top: 1.5rem; color: #666;">&copy; 2026 Rizz23 Ultra Lounge. All Rights Reserved.</p>
   </footer>
 
-  <!-- Firebase SDKs (Compat version) -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
+  <!-- Application Logic -->
   <script>
-    // Firebase Setup
     const firebaseConfig = {
       apiKey: "AIzaSyBfR1RxhxovoVCCTWVfWdp4lTcyiNB4akQ",
       authDomain: "rizz23-79b31.firebaseapp.com",
@@ -818,78 +818,28 @@
     const WHATSAPP_NUMBER = "18765550199";
     window.isAdminLoggedIn = false;
     let uploadedBase64Image = "";
-
-    const defaultMenu = [
-      {
-        id: "1",
-        category: "Breakfast",
-        name: "Truffle & Gold Omelette Gourmet",
-        description: "Organic eggs folded with black truffle butter, aged gruyère, and microgreens served with champagne-poached berries.",
-        price: "$38",
-        image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=600&q=80"
-      },
-      {
-        id: "2",
-        category: "Breakfast",
-        name: "Brioche French Toast Deluxe",
-        description: "Artisanal brioche soaked in Bourbon vanilla bean batter, topped with caramelized banana and maple caviar.",
-        price: "$32",
-        image: "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=600&q=80"
-      },
-      {
-        id: "3",
-        category: "Lunch",
-        name: "Wagyu Beef Lounge Burger",
-        description: "A5 Wagyu patty, gold-dusted brioche bun, smoked gouda, caramelized shallots, and black garlic aioli.",
-        price: "$48",
-        image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80"
-      },
-      {
-        id: "4",
-        category: "Dinner",
-        name: "24K Gold Ribeye Steak",
-        description: "16oz Prime dry-aged ribeye enveloped in 24K edible gold leaf, served with bone marrow jus and asparagus.",
-        price: "$165",
-        image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80"
-      },
-      {
-        id: "5",
-        category: "Drinks & VIP",
-        name: "Rizz23 Royal Gold Elixir",
-        description: "Don Julio 1942, Grand Marnier Cuvée, fresh lime juice, organic agave nectar, and edible gold flakes.",
-        price: "$45",
-        image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=600&q=80"
-      }
-    ];
-
     let currentMenuItems = [];
 
     function initApp() {
-      const stored = localStorage.getItem("rizz23_menu");
-      if (stored) {
-        try {
-          currentMenuItems = JSON.parse(stored);
-        } catch(e) {
-          currentMenuItems = defaultMenu;
-        }
-      } else {
-        currentMenuItems = defaultMenu;
-        saveMenuToStorage();
-      }
-
       document.getElementById("vip-header-btn").href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hello Rizz23 Ultra Lounge, I would like to reserve a table.")}`;
-      renderMenu(currentMenuItems);
-    }
-
-    function saveMenuToStorage() {
-      localStorage.setItem("rizz23_menu", JSON.stringify(currentMenuItems));
+      
+      // Real-time listener for Firestore menu items
+      db.collection("menuItems").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
+        currentMenuItems = [];
+        snapshot.forEach((doc) => {
+          currentMenuItems.push({ id: doc.id, ...doc.data() });
+        });
+        renderMenu(currentMenuItems);
+      }, (error) => {
+        console.error("Firestore Listen Error: ", error);
+      });
     }
 
     function renderMenu(items) {
       const grid = document.getElementById("menu-grid");
       grid.innerHTML = "";
 
-      if(items.length === 0) {
+      if (items.length === 0) {
         grid.innerHTML = `<p style="text-align:center; grid-column:1/-1; color:var(--text-muted);">No items available in this category.</p>`;
         return;
       }
@@ -942,33 +892,31 @@
     }
 
     async function openAdminModal() {
-  if (!window.isAdminLoggedIn) {
-    let email = prompt("Enter Client Admin Email:", "");
-    if (!email) return;
+      if (!window.isAdminLoggedIn) {
+        let email = prompt("Enter Client Admin Email:", "");
+        if (!email) return;
 
-    let password = prompt("Enter Client Admin Password:", "");
-    if (!password) return;
+        let password = prompt("Enter Client Admin Password:", "");
+        if (!password) return;
 
-    try {
-      // Authenticates with Firebase Auth using the email and password entered
-      await auth.signInWithEmailAndPassword(email.trim(), password.trim());
-      
-      window.isAdminLoggedIn = true;
-      alert("Admin Mode Activated via Firebase!");
-      renderMenu(currentMenuItems);
-    } catch (error) {
-      alert("Firebase Login Failed: " + error.message);
-      return;
+        try {
+          await auth.signInWithEmailAndPassword(email.trim(), password.trim());
+          window.isAdminLoggedIn = true;
+          alert("Admin Mode Activated via Firebase!");
+          renderMenu(currentMenuItems);
+        } catch (error) {
+          alert("Firebase Login Failed: " + error.message);
+          return;
+        }
+      }
+
+      const modal = document.getElementById("admin-modal") || document.getElementById("adminModal");
+      if (modal) {
+        modal.classList.add("active");
+        modal.style.display = "flex";
+      }
     }
-  }
 
-  const modal = document.getElementById("admin-modal") || document.getElementById("adminModal");
-  if (modal) {
-    modal.classList.add("active");
-    modal.style.display = "flex";
-  }
-}
-     
     function closeAdminModal() {
       const modal = document.getElementById("admin-modal") || document.getElementById("adminModal");
       if (modal) {
@@ -977,18 +925,49 @@
       }
     }
 
-    function convertFileToBase64(fileInput) {
-      const file = fileInput.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onloadend = function () {
-          uploadedBase64Image = reader.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    }
+   function convertFileToBase64(fileInput) {
+  const file = fileInput.files[0];
+  if (!file) return;
 
-    function handleAddNewItem(e) {
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const img = new Image();
+    img.onload = function () {
+      // 1. Set maximum width/height dimensions
+      const MAX_WIDTH = 800;
+      const MAX_HEIGHT = 800;
+      let width = img.width;
+      let height = img.height;
+
+      // 2. Calculate proportional dimensions
+      if (width > height) {
+        if (width > MAX_WIDTH) {
+          height *= MAX_WIDTH / width;
+          width = MAX_WIDTH;
+        }
+      } else {
+        if (height > MAX_HEIGHT) {
+          width *= MAX_HEIGHT / height;
+          height = MAX_HEIGHT;
+        }
+      }
+
+      // 3. Draw image onto canvas to resize
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // 4. Compress output to JPEG with 0.7 quality
+      uploadedBase64Image = canvas.toDataURL("image/jpeg", 0.7);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+    async function handleAddNewItem(e) {
       e.preventDefault();
 
       const name = document.getElementById("admin-item-name").value;
@@ -998,42 +977,49 @@
       const urlImage = document.getElementById("admin-item-image-url").value;
 
       const finalImage = urlImage || uploadedBase64Image || "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80";
+      const formattedPrice = price.startsWith("$") ? price : `$${price}`;
 
-      const newItem = {
-        id: Date.now().toString(),
-        category: category,
-        name: name,
-        description: desc,
-        price: price.startsWith("$") ? price : `$${price}`,
-        image: finalImage
-      };
+      try {
+        await db.collection("menuItems").add({
+          category: category,
+          name: name,
+          description: desc,
+          price: formattedPrice,
+          image: finalImage,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
 
-      currentMenuItems.unshift(newItem);
-      saveMenuToStorage();
-      renderMenu(currentMenuItems);
-
-      document.getElementById("admin-add-form").reset();
-      uploadedBase64Image = "";
-      closeAdminModal();
+        alert("Item added live!");
+        document.getElementById("admin-add-form").reset();
+        uploadedBase64Image = "";
+        closeAdminModal();
+      } catch (error) {
+        alert("Error adding item to Firestore: " + error.message);
+      }
     }
 
-    function changePrice(id) {
+    async function changePrice(id) {
       const item = currentMenuItems.find(i => i.id === id);
       if (item) {
         const newPrice = prompt(`Enter new price for ${item.name}:`, item.price);
         if (newPrice) {
-          item.price = newPrice.startsWith("$") ? newPrice : `$${newPrice}`;
-          saveMenuToStorage();
-          renderMenu(currentMenuItems);
+          const formattedPrice = newPrice.startsWith("$") ? newPrice : `$${newPrice}`;
+          try {
+            await db.collection("menuItems").doc(id).update({ price: formattedPrice });
+          } catch (error) {
+            alert("Error updating price: " + error.message);
+          }
         }
       }
     }
 
-    function deleteMenuItem(id) {
+    async function deleteMenuItem(id) {
       if (confirm("Are you sure you want to remove this item from your live menu?")) {
-        currentMenuItems = currentMenuItems.filter(i => i.id !== id);
-        saveMenuToStorage();
-        renderMenu(currentMenuItems);
+        try {
+          await db.collection("menuItems").doc(id).delete();
+        } catch (error) {
+          alert("Error deleting item: " + error.message);
+        }
       }
     }
 
