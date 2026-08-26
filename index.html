@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rizz23 Ultra Lounge | Fine Dining & VIP Experience</title>
+  
+  <!-- Fonts: Cinzel, Cormorant Garamond, Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #050505;
+      --card-bg: #0d0d0d;
+      --card-bg-alt: rgba(20, 20, 20, 0.75);
+      --gold-primary: #D4AF37;
+      --gold-light: #FBF5B7;
+      --gold-gradient: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+      --text-light: #F9F9F9;
+      --text-muted: #A5A5A5;
+      --border-gold: rgba(212, 175, 55, 0.25);
+      --border-gold-bright: rgba(212, 175, 55, 0.7);
+      --font-heading: 'Cinzel', serif;
+      --font-serif: 'Cormorant Garamond', serif;
+      --font-sans: 'Montserrat', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      font-family: var(--font-sans);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    .gold-text {
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-subtitle {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 3rem;
+      font-style: italic;
+    }
+
+    /* Header & Navigation */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 6%;
+      background: rgba(5, 5, 5, 0.95);
+      backdrop-filter: blur(15px);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid var(--border-gold);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .logo-container img {
+      height: 48px;
+      width: 48px;
+      border-radius: 50%;
+      border: 1px solid var(--gold-primary);
+    }
+
+    .brand-name {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    nav a {
+      color: var(--text-light);
+      text-decoration: none;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: var(--gold-primary);
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .btn-gold {
+      background: var(--gold-gradient);
+      color: #000;
+      padding: 0.75rem 1.6rem;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      display: inline-block;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+    }
+
+    .btn-gold:hover {
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .btn-admin-toggle {
+      background: transparent;
+      border: 1px solid var(--border-gold);
+      color: var(--gold-primary);
+      padding: 0.75rem 1.2rem;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-admin-toggle:hover {
+      background: rgba(212, 175, 55, 0.15);
+      border-color: var(--gold-primary);
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 4rem 1.5rem;
+      background: linear-gradient(180deg, rgba(5,5,5,0.4) 0%, rgba(5,5,5,1) 100%),
+                  radial-gradient(circle at center, rgba(212, 175, 55, 0.15) 0%, rgba(5,5,5,0.95) 80%);
+    }
+
+    .hero-tag {
+      font-family: var(--font-heading);
+      font-size: 0.85rem;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--gold-primary);
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(2.5rem, 6vw, 4.2rem);
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      max-width: 650px;
+      font-size: 1.1rem;
+      margin-bottom: 2.5rem;
+      font-family: var(--font-serif);
+      font-style: italic;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-outline {
+      border: 1px solid var(--gold-primary);
+      color: var(--gold-primary);
+      background: transparent;
+      padding: 0.75rem 1.6rem;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline:hover {
+      background: var(--gold-gradient);
+      color: #000;
+      border-color: transparent;
+    }
+
+    /* Dining Section */
+    .dining-section {
+      padding: 6rem 8%;
+      background: var(--card-bg);
+      border-top: 1px solid var(--border-gold);
+      border-bottom: 1px solid var(--border-gold);
+    }
+
+    .dining-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .dining-content h3 {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      letter-spacing: 2px;
+    }
+
+    .dining-content p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .dining-features {
+      list-style: none;
+      margin-bottom: 2rem;
+    }
+
+    .dining-features li {
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .dining-features li span {
+      color: var(--gold-primary);
+    }
+
+    .dining-image-frame {
+      position: relative;
+      border: 1px solid var(--border-gold-bright);
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(212, 175, 55, 0.03);
+    }
+
+    .dining-image-frame img {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      border-radius: 8px;
+      display: block;
+    }
+
+    /* Menu Section */
+    .menu-container {
+      padding: 6rem 6%;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .filter-container {
+      display: flex;
+      justify-content: center;
+      gap: 0.8rem;
+      margin-bottom: 3.5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: 1px solid var(--border-gold);
+      color: var(--text-light);
+      padding: 0.6rem 1.6rem;
+      border-radius: 25px;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--gold-gradient);
+      color: #000;
+      border-color: transparent;
+      font-weight: 600;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2.2rem;
+    }
+
+    .menu-card {
+      background: var(--card-bg-alt);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-gold);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 30px rgba(212, 175, 55, 0.2);
+      border-color: var(--border-gold-bright);
+    }
+
+    .menu-card-img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-bottom: 1px solid var(--border-gold);
+    }
+
+    .menu-card-body {
+      padding: 1.6rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.8rem;
+    }
+
+    .item-title {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .item-price {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--gold-primary);
+    }
+
+    .item-desc {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-order-item {
+      flex: 1;
+      background: transparent;
+      border: 1px solid var(--gold-primary);
+      color: var(--gold-primary);
+      padding: 0.8rem;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      letter-spacing: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-order-item:hover {
+      background: var(--gold-gradient);
+      color: #000;
+      border-color: transparent;
+    }
+
+    .btn-admin-action {
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid var(--border-gold);
+      color: var(--gold-light);
+      padding: 0.5rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-admin-action:hover {
+      background: var(--gold-primary);
+      color: #000;
+    }
+
+    .btn-admin-delete {
+      border-color: rgba(255, 85, 85, 0.4);
+      color: #ff6b6b;
+    }
+
+    .btn-admin-delete:hover {
+      background: #ff4d4d;
+      color: #fff;
+    }
+
+    /* Event Booking Section */
+    .events-section {
+      padding: 6rem 8%;
+      background: radial-gradient(circle at bottom, rgba(212, 175, 55, 0.08) 0%, rgba(5,5,5,1) 80%);
+      border-top: 1px solid var(--border-gold);
+    }
+
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 3.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .events-info h3 {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      margin-bottom: 1.2rem;
+      letter-spacing: 2px;
+    }
+
+    .events-info p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .event-card-types {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .type-box {
+      background: var(--card-bg-alt);
+      border: 1px solid var(--border-gold);
+      padding: 1.2rem;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .type-box h4 {
+      font-family: var(--font-serif);
+      color: var(--gold-primary);
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .type-box p {
+      font-size: 0.78rem;
+      margin-bottom: 0;
+    }
+
+    /* Booking Form Styling */
+    .booking-form-card {
+      background: var(--card-bg-alt);
+      border: 1px solid var(--border-gold-bright);
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .form-group {
+      margin-bottom: 1.3rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--gold-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+      width: 100%;
+      background: #000;
+      border: 1px solid var(--border-gold);
+      padding: 0.85rem 1rem;
+      color: #fff;
+      border-radius: 6px;
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+    }
+
+    /* Modal / Admin Panel Overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      padding: 1.5rem;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-gold-bright);
+      border-radius: 12px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 550px;
+      position: relative;
+      box-shadow: 0 15px 40px rgba(212, 175, 55, 0.2);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .modal-close:hover {
+      color: var(--gold-primary);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 3.5rem 1rem;
+      border-top: 1px solid var(--border-gold);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      background: #000;
+    }
+
+    footer p {
+      margin-bottom: 0.5rem;
+    }
+
+    /* Mobile Adaptations */
+    @media (max-width: 900px) {
+      header { flex-direction: column; gap: 1rem; text-align: center; }
+      nav { flex-wrap: wrap; justify-content: center; gap: 1rem; }
+      .nav-actions { width: 100%; justify-content: center; }
+      .hero h1 { font-size: 2.2rem; }
+      .event-card-types { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body onload="initApp()">
+
+  <!-- Navigation Bar -->
+  <header>
+    <a href="#" class="logo-container">
+      <img src="logo.png" alt="Rizz23 Logo" class="logo-img">
+      <span class="brand-name gold-text">RIZZ23</span>
+    </a>
+    <nav>
+      <a href="#dining">Dining</a>
+      <a href="#menu">Menu</a>
+      <a href="#events">Private Events</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="btn-admin-toggle" onclick="openAdminModal()">Client Admin</button>
+      <a href="#" id="vip-header-btn" class="btn-gold" target="_blank">Reserve Table</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <span class="hero-tag">Welcome to Pure Luxury</span>
+    <h1 class="gold-text">Rizz23 Ultra Lounge</h1>
+    <p>An exquisite culinary journey featuring artisanal breakfast, prime lunch cuts, luxury dinners, and high-energy VIP lounge experiences.</p>
+    <div class="hero-actions">
+      <a href="#menu" class="btn-gold">Explore Menu</a>
+      <a href="#events" class="btn-outline">Book Private Event</a>
+    </div>
+  </section>
+
+  <!-- Fine Dining Section -->
+  <section class="dining-section" id="dining">
+    <div class="dining-grid">
+      <div class="dining-content">
+        <span class="hero-tag">Atmosphere & Sophistication</span>
+        <h3 class="gold-text">The Fine Dining Experience</h3>
+        <p>At Rizz23 Ultra Lounge, we elevate dining into an art form. Our culinary team crafts world-class dishes using sustainable, top-tier ingredients, served in an ambiance designed for celebration and indulgence.</p>
+        <ul class="dining-features">
+          <li><span>◆</span> Gourmet Breakfast, Lunch & Dinner Curations</li>
+          <li><span>◆</span> Sommelier-Crafted Wine & Artisanal Cocktail List</li>
+          <li><span>◆</span> Intimate Lighting, VIP Cabanas & Private Dining Rooms</li>
+        </ul>
+        <a href="#events" class="btn-outline">Inquire For Dining Groups</a>
+      </div>
+      <div class="dining-image-frame">
+        <img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=800&q=80" alt="Rizz23 Luxury Interior Dining" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Dynamic Menu Section -->
+  <section class="menu-container" id="menu">
+    <h2 class="section-title gold-text">Curated Culinary Menu</h2>
+    <p class="section-subtitle">Select a category below to view our gourmet offerings</p>
+
+    <!-- Interactive Filter Buttons -->
+    <div class="filter-container" id="filter-buttons">
+      <button class="filter-btn active" onclick="filterMenu('All')">All Categories</button>
+      <button class="filter-btn" onclick="filterMenu('Breakfast')">Breakfast</button>
+      <button class="filter-btn" onclick="filterMenu('Lunch')">Lunch</button>
+      <button class="filter-btn" onclick="filterMenu('Dinner')">Dinner</button>
+      <button class="filter-btn" onclick="filterMenu('Drinks & VIP')">Drinks & VIP</button>
+    </div>
+
+    <!-- Menu Card Display Grid -->
+    <div class="menu-grid" id="menu-grid"></div>
+  </section>
+
+  <!-- Event Booking Section -->
+  <section class="events-section" id="events">
+    <div class="events-grid">
+      <div class="events-info">
+        <span class="hero-tag">Host Your Special Moments</span>
+        <h3 class="gold-text">Birthday Parties & Private Celebrations</h3>
+        <p>Whether you are hosting an intimate birthday dinner, a corporate gala, or an exclusive night out in our VIP lounge, Rizz23 provides tailored event packages to fit your exact vision.</p>
+        
+        <div class="event-card-types">
+          <div class="type-box">
+            <h4>Birthday Parties</h4>
+            <p>Custom cakes, bottle service presentation & VIP seating.</p>
+          </div>
+          <div class="type-box">
+            <h4>Private Buyouts</h4>
+            <p>Exclusive access to the lounge, full bar & DJ setup.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- WhatsApp Event Booking Form -->
+      <div class="booking-form-card">
+        <h3 class="gold-text" style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 1.5rem; text-align: center;">Book An Event</h3>
+        <form id="event-booking-form" onsubmit="handleEventBooking(event)">
+          <div class="form-group">
+            <label for="guest-name">Your Full Name</label>
+            <input type="text" id="guest-name" class="form-control" placeholder="e.g. Marcus Stone" required />
+          </div>
+          <div class="form-group">
+            <label for="event-type">Event Type</label>
+            <select id="event-type" class="form-control" required>
+              <option value="Birthday Celebration">Birthday Celebration</option>
+              <option value="Private Dinner">Private Dinner Party</option>
+              <option value="VIP Lounge Table">VIP Lounge Table</option>
+              <option value="Corporate Event">Corporate / Group Gathering</option>
+            </select>
+          </div>
+          <div style="display: flex; gap: 1rem;">
+            <div class="form-group" style="flex: 1;">
+              <label for="event-date">Preferred Date</label>
+              <input type="date" id="event-date" class="form-control" required />
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label for="event-guests">Guest Count</label>
+              <input type="number" id="event-guests" class="form-control" min="1" placeholder="e.g. 6" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="event-notes">Special Requests / Notes</label>
+            <textarea id="event-notes" class="form-control" rows="3" placeholder="Champagne requests, custom cake setup, music preferences..."></textarea>
+          </div>
+          <button type="submit" class="btn-gold" style="width: 100%; text-align: center; border-radius: 6px;">Submit Reservation via WhatsApp</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Client Admin Portal Modal -->
+  <div class="modal-overlay" id="admin-modal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeAdminModal()">&times;</button>
+      <h3 class="gold-text" style="font-family: var(--font-heading); font-size: 1.6rem; margin-bottom: 1.5rem; text-align: center;">Restaurant Menu Manager</h3>
+      
+      <form id="admin-add-form" onsubmit="handleAddNewItem(event)">
+        <div class="form-group">
+          <label>Item Name</label>
+          <input type="text" id="admin-item-name" class="form-control" placeholder="e.g. Caviar & Champagne Service" required />
+        </div>
+        
+        <div style="display: flex; gap: 1rem;">
+          <div class="form-group" style="flex: 1;">
+            <label>Category</label>
+            <select id="admin-item-category" class="form-control" required>
+              <option value="Breakfast">Breakfast</option>
+              <option value="Lunch">Lunch</option>
+              <option value="Dinner">Dinner</option>
+              <option value="Drinks & VIP">Drinks & VIP</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label>Price ($)</label>
+            <input type="text" id="admin-item-price" class="form-control" placeholder="e.g. $120" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="admin-item-desc" class="form-control" rows="2" placeholder="Item ingredient notes or luxury serving style..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Image Source Option</label>
+          <input type="text" id="admin-item-image-url" class="form-control" placeholder="Paste Image URL or Leave Empty to Upload File" />
+          <input type="file" id="admin-item-image-file" class="form-control" accept="image/*" style="margin-top: 8px;" onchange="convertFileToBase64(this)" />
+        </div>
+
+        <button type="submit" class="btn-gold" style="width: 100%; border-radius: 6px; margin-top: 1rem;">Add Item To Live Menu</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p class="gold-text" style="font-family: var(--font-heading); letter-spacing: 2px;">RIZZ23 ULTRA LOUNGE</p>
+    <p>High-End Dining & VIP Nightlife Experience</p>
+    <p style="margin-top: 1.5rem; color: #666;">&copy; 2026 Rizz23 Ultra Lounge. All Rights Reserved.</p>
+  </footer>
+
+  <!-- Firebase SDKs (Compat version) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+  <script>
+    // Firebase Setup
+    const firebaseConfig = {
+      apiKey: "AIzaSyBfR1RxhxovoVCCTWVfWdp4lTcyiNB4akQ",
+      authDomain: "rizz23-79b31.firebaseapp.com",
+      projectId: "rizz23-79b31",
+      storageBucket: "rizz23-79b31.firebasestorage.app",
+      messagingSenderId: "250442809401",
+      appId: "1:250442809401:web:2bafe85e36c5cc71be8de8",
+      measurementId: "G-PVBGNEPZX7"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    const WHATSAPP_NUMBER = "18765550199";
+    window.isAdminLoggedIn = false;
+    let uploadedBase64Image = "";
+
+    const defaultMenu = [
+      {
+        id: "1",
+        category: "Breakfast",
+        name: "Truffle & Gold Omelette Gourmet",
+        description: "Organic eggs folded with black truffle butter, aged gruyère, and microgreens served with champagne-poached berries.",
+        price: "$38",
+        image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: "2",
+        category: "Breakfast",
+        name: "Brioche French Toast Deluxe",
+        description: "Artisanal brioche soaked in Bourbon vanilla bean batter, topped with caramelized banana and maple caviar.",
+        price: "$32",
+        image: "https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: "3",
+        category: "Lunch",
+        name: "Wagyu Beef Lounge Burger",
+        description: "A5 Wagyu patty, gold-dusted brioche bun, smoked gouda, caramelized shallots, and black garlic aioli.",
+        price: "$48",
+        image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: "4",
+        category: "Dinner",
+        name: "24K Gold Ribeye Steak",
+        description: "16oz Prime dry-aged ribeye enveloped in 24K edible gold leaf, served with bone marrow jus and asparagus.",
+        price: "$165",
+        image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: "5",
+        category: "Drinks & VIP",
+        name: "Rizz23 Royal Gold Elixir",
+        description: "Don Julio 1942, Grand Marnier Cuvée, fresh lime juice, organic agave nectar, and edible gold flakes.",
+        price: "$45",
+        image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=600&q=80"
+      }
+    ];
+
+    let currentMenuItems = [];
+
+    function initApp() {
+      const stored = localStorage.getItem("rizz23_menu");
+      if (stored) {
+        try {
+          currentMenuItems = JSON.parse(stored);
+        } catch(e) {
+          currentMenuItems = defaultMenu;
+        }
+      } else {
+        currentMenuItems = defaultMenu;
+        saveMenuToStorage();
+      }
+
+      document.getElementById("vip-header-btn").href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hello Rizz23 Ultra Lounge, I would like to reserve a table.")}`;
+      renderMenu(currentMenuItems);
+    }
+
+    function saveMenuToStorage() {
+      localStorage.setItem("rizz23_menu", JSON.stringify(currentMenuItems));
+    }
+
+    function renderMenu(items) {
+      const grid = document.getElementById("menu-grid");
+      grid.innerHTML = "";
+
+      if(items.length === 0) {
+        grid.innerHTML = `<p style="text-align:center; grid-column:1/-1; color:var(--text-muted);">No items available in this category.</p>`;
+        return;
+      }
+
+      items.forEach(item => {
+        const orderText = `Hello Rizz23 Ultra Lounge, I would like to order: *${item.name}* (${item.price}).`;
+        const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(orderText)}`;
+
+        const card = document.createElement("div");
+        card.className = "menu-card";
+        card.innerHTML = `
+          <img src="${item.image}" alt="${item.name}" class="menu-card-img" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80'" />
+          <div class="menu-card-body">
+            <div class="menu-header">
+              <h3 class="item-title">${item.name}</h3>
+              <span class="item-price">${item.price}</span>
+            </div>
+            <p class="item-desc">${item.description}</p>
+            <div class="card-actions">
+              <a href="${waLink}" target="_blank" style="text-decoration:none; flex:1;">
+                <button class="btn-order-item">Order via WhatsApp</button>
+              </a>
+              ${window.isAdminLoggedIn ? `
+                <button class="btn-admin-action" onclick="changePrice('${item.id}')">Edit Price</button>
+                <button class="btn-admin-action btn-admin-delete" onclick="deleteMenuItem('${item.id}')">Delete</button>
+              ` : ''}
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterMenu(category) {
+      const buttons = document.querySelectorAll(".filter-btn");
+      buttons.forEach(btn => {
+        if (btn.innerText.trim().toLowerCase() === category.toLowerCase() || (category === 'All' && btn.innerText.includes('All'))) {
+          btn.classList.add("active");
+        } else {
+          btn.classList.remove("active");
+        }
+      });
+
+      if (category === "All") {
+        renderMenu(currentMenuItems);
+      } else {
+        const filtered = currentMenuItems.filter(item => item.category.toLowerCase().trim() === category.toLowerCase().trim());
+        renderMenu(filtered);
+      }
+    }
+
+    async function openAdminModal() {
+  if (!window.isAdminLoggedIn) {
+    let email = prompt("Enter Client Admin Email:", "");
+    if (!email) return;
+
+    let password = prompt("Enter Client Admin Password:", "");
+    if (!password) return;
+
+    try {
+      // Authenticates with Firebase Auth using the email and password entered
+      await auth.signInWithEmailAndPassword(email.trim(), password.trim());
+      
+      window.isAdminLoggedIn = true;
+      alert("Admin Mode Activated via Firebase!");
+      renderMenu(currentMenuItems);
+    } catch (error) {
+      alert("Firebase Login Failed: " + error.message);
+      return;
+    }
+  }
+
+  const modal = document.getElementById("admin-modal") || document.getElementById("adminModal");
+  if (modal) {
+    modal.classList.add("active");
+    modal.style.display = "flex";
+  }
+}
+     
+    function closeAdminModal() {
+      const modal = document.getElementById("admin-modal") || document.getElementById("adminModal");
+      if (modal) {
+        modal.classList.remove("active");
+        modal.style.display = "none";
+      }
+    }
+
+    function convertFileToBase64(fileInput) {
+      const file = fileInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = function () {
+          uploadedBase64Image = reader.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function handleAddNewItem(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("admin-item-name").value;
+      const category = document.getElementById("admin-item-category").value;
+      const price = document.getElementById("admin-item-price").value;
+      const desc = document.getElementById("admin-item-desc").value;
+      const urlImage = document.getElementById("admin-item-image-url").value;
+
+      const finalImage = urlImage || uploadedBase64Image || "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80";
+
+      const newItem = {
+        id: Date.now().toString(),
+        category: category,
+        name: name,
+        description: desc,
+        price: price.startsWith("$") ? price : `$${price}`,
+        image: finalImage
+      };
+
+      currentMenuItems.unshift(newItem);
+      saveMenuToStorage();
+      renderMenu(currentMenuItems);
+
+      document.getElementById("admin-add-form").reset();
+      uploadedBase64Image = "";
+      closeAdminModal();
+    }
+
+    function changePrice(id) {
+      const item = currentMenuItems.find(i => i.id === id);
+      if (item) {
+        const newPrice = prompt(`Enter new price for ${item.name}:`, item.price);
+        if (newPrice) {
+          item.price = newPrice.startsWith("$") ? newPrice : `$${newPrice}`;
+          saveMenuToStorage();
+          renderMenu(currentMenuItems);
+        }
+      }
+    }
+
+    function deleteMenuItem(id) {
+      if (confirm("Are you sure you want to remove this item from your live menu?")) {
+        currentMenuItems = currentMenuItems.filter(i => i.id !== id);
+        saveMenuToStorage();
+        renderMenu(currentMenuItems);
+      }
+    }
+
+    function handleEventBooking(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById("guest-name").value;
+      const type = document.getElementById("event-type").value;
+      const date = document.getElementById("event-date").value;
+      const guests = document.getElementById("event-guests").value;
+      const notes = document.getElementById("event-notes").value;
+
+      const message = `*NEW EVENT BOOKING REQUEST - RIZZ23*\n\n` +
+                      `👤 *Name:* ${name}\n` +
+                      `🎉 *Event Type:* ${type}\n` +
+                      `📅 *Date:* ${date}\n` +
+                      `👥 *Guests:* ${guests}\n` +
+                      `📝 *Notes/Requests:* ${notes || "None"}`;
+
+      const waURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+      window.open(waURL, "_blank");
+    }
+  </script>
+</body>
+</html>
