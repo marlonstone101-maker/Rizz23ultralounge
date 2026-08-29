@@ -724,7 +724,6 @@
     <!-- Interactive Filter Buttons -->
     <div class="filter-container" id="filter-buttons">
       <button class="filter-btn active" onclick="filterMenu('All')">All Categories</button>
-      <button class="filter-btn" onclick="filterMenu('Breakfast')">Breakfast</button>
       <button class="filter-btn" onclick="filterMenu('Lunch')">Lunch</button>
       <button class="filter-btn" onclick="filterMenu('Dinner')">Dinner</button>
       <button class="filter-btn" onclick="filterMenu('Drinks & VIP')">Drinks & VIP</button>
@@ -847,7 +846,6 @@
           <div class="form-group" style="flex: 1;">
             <label>Category</label>
             <select id="admin-item-category" class="form-control" required>
-              <option value="Breakfast">Breakfast</option>
               <option value="Lunch">Lunch</option>
               <option value="Dinner">Dinner</option>
               <option value="Drinks & VIP">Drinks & VIP</option>
@@ -1033,7 +1031,7 @@
         }
       } catch (err) {
         console.error("Order dispatch failed:", err);
-        alert("Network error: Failed to connect to POS server. Ensure 'node server.js' is running.");
+        alert("Network error: Unable to server. Please try again.");
       }
     }
 
