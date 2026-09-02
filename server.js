@@ -6,9 +6,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const LOYVERSE_TOKEN = process.env.LOYVERSE_TOKEN || 'test_token_123';
-const LOYVERSE_STORE_ID = process.env.LOYVERSE_STORE_ID || 'test_token_123';
-const LOYVERSE_POS_ID = process.env.LOYVERSE_POS_ID || 'test_token_123';
+const LOYVERSE_TOKEN = process.env.LOYVERSE_TOKEN;
+const LOYVERSE_STORE_ID = process.env.LOYVERSE_STORE_ID;
+const LOYVERSE_POS_ID = process.env.LOYVERSE_POS_ID;
+// Set this to your Loyverse Payment Type UUID from Back Office
+const LOYVERSE_PAYMENT_TYPE_ID = process.env.LOYVERSE_PAYMENT_TYPE_ID; 
 
 app.post('/api/create-order', async (req, res) => {
   const { customerName, customerEmail, deliveryNotes, itemName, amount } = req.body;
@@ -31,7 +33,7 @@ app.post('/api/create-order', async (req, res) => {
     ],
     payments: [
       {
-        payment_type_id: "CASH", 
+        payment_type_id: LOYVERSE_PAYMENT_TYPE_ID, 
         paid_amount: parseFloat(amount)
       }
     ]
@@ -48,8 +50,18 @@ app.post('/api/create-order', async (req, res) => {
     res.status(200).json({ success: true, receipt: response.data });
   } catch (error) {
     console.error('Loyverse Order Error:', error.response ? error.response.data : error.message);
-    res.status(500).json({ success: false, error: 'Failed to dispatch order to Loyverse KDS.' });
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to dispatch order to Loyverse KDS.',
+      details: error.response ? error.response.data : error.message
+    });
   }
 });
-app.get('/', (req, res) => {res.send('Server is up and running!');});
-app.listen(3000, () => console.log('Backend server operational on port 3000'));
+
+app.get('/', (req, res) => {
+  res.send('Server is up and running!');
+});
+
+// Dynamic port assignment for hosting environments like Render
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Backend server operational on port ${PORT}`));
