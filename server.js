@@ -1,11 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
-
+const path = require('path');
 const app = express();
 app.use(cors());
 app.use(express.json());
-
+app.use(express.static(__dirname));
 const LOYVERSE_TOKEN = process.env.LOYVERSE_TOKEN;
 const LOYVERSE_STORE_ID = process.env.LOYVERSE_STORE_ID;
 const LOYVERSE_POS_ID = process.env.LOYVERSE_POS_ID;
@@ -59,9 +59,8 @@ app.post('/api/create-order', async (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.send('Server is up and running!');
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
-
 // Dynamic port assignment for hosting environments like Render
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Backend server operational on port ${PORT}`));
