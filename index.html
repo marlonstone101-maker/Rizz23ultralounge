@@ -43,10 +43,11 @@
     }
 
     .gold-text {
-      background: var(--gold-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
     .section-title {
       font-family: var(--font-heading);
@@ -101,15 +102,16 @@
       letter-spacing: 3px;
     }
 
-    .brand-subscript {
-      display: inline-block;
-      font-size: 0.7em;
-      transform: translateY(5px);
-      line-height: 1;
-      background: var(--gold-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+   .brand-subscript {
+    display: inline-block;
+    font-size: 0.7em;
+    transform: translateY(5px);
+    line-height: 1;
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
     nav {
       display: flex;
