@@ -155,7 +155,7 @@ app.post('/api/create-payment', async (req, res) => {
     });
 
     const wipayData = await wipayResponse.json();
-
+console.log('WiPayData:', wipayData);
     return res.status(200).json({
       success: true,
       redirect_url: wipayData.url || wipayData.payment_url,
