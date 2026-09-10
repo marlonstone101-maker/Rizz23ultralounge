@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Reservation | Rizz23 Ultra Lounge</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #050505;
+      --card-bg: #0d0d0d;
+      --card-bg-alt: rgba(20, 20, 20, 0.85);
+      --gold-primary: #D4AF37;
+      --gold-light: #FBF5B7;
+      --gold-gradient: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+      --text-light: #F9F9F9;
+      --text-muted: #A5A5A5;
+      --border-gold: rgba(212, 175, 55, 0.25);
+      --border-gold-bright: rgba(212, 175, 55, 0.7);
+      --font-heading: 'Cinzel', serif;
+      --font-serif: 'Cormorant Garamond', serif;
+      --font-sans: 'Montserrat', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      font-family: var(--font-sans);
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .gold-text {
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Header Navigation */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 6%;
+      background: rgba(5, 5, 5, 0.95);
+      backdrop-filter: blur(15px);
+      border-bottom: 1px solid var(--border-gold);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .brand-name {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+    }
+
+    .brand-subscript {
+      display: inline-block;
+      font-size: 0.7em;
+      transform: translateY(5px);
+      line-height: 1;
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    nav a {
+      color: var(--text-light);
+      text-decoration: none;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: var(--gold-primary);
+    }
+
+    /* Hero Banner */
+    .reservation-hero {
+      text-align: center;
+      padding: 3rem 1.5rem 1.5rem;
+      background: radial-gradient(circle at center, rgba(212, 175, 55, 0.12) 0%, rgba(5,5,5,1) 80%);
+    }
+
+    .reservation-hero h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5vw, 3rem);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .reservation-hero p {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .hours-badge {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.4rem 1.2rem;
+      border: 1px solid var(--border-gold);
+      border-radius: 20px;
+      background: rgba(212, 175, 55, 0.08);
+      font-size: 0.82rem;
+      color: var(--gold-light);
+      letter-spacing: 1px;
+    }
+
+    /* Main Container */
+    .content-wrapper {
+      max-width: 1200px;
+      margin: 0 auto 4rem;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    /* Birthday & VIP Packages */
+    .packages-title {
+      font-family: var(--font-heading);
+      text-align: center;
+      font-size: 1.8rem;
+      letter-spacing: 3px;
+      margin-bottom: 1.5rem;
+    }
+
+    .packages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.8rem;
+      margin-bottom: 2rem;
+    }
+
+    .package-card {
+      background: var(--card-bg-alt);
+      border: 1px solid var(--border-gold);
+      border-radius: 12px;
+      padding: 1.8rem;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .package-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--border-gold-bright);
+    }
+
+    .package-card.platinum {
+      border-color: #e5e4e2;
+      box-shadow: 0 10px 30px rgba(229, 228, 226, 0.15);
+    }
+
+    .package-header {
+      border-bottom: 1px solid var(--border-gold);
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .package-name {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .package-price {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--gold-primary);
+      margin-top: 0.3rem;
+    }
+
+    .package-capacity {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--gold-light);
+      margin-top: 0.2rem;
+    }
+
+    .package-features {
+      list-style: none;
+      flex-grow: 1;
+    }
+
+    .package-features li {
+      font-size: 0.88rem;
+      margin-bottom: 0.6rem;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .package-features li::before {
+      content: "◆";
+      color: var(--gold-primary);
+      font-size: 0.7rem;
+    }
+
+    /* Policy Grid */
+    .policy-box {
+      background: rgba(212, 175, 55, 0.04);
+      border: 1px solid var(--border-gold);
+      border-radius: 10px;
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .policy-col h4 {
+      font-family: var(--font-heading);
+      color: var(--gold-primary);
+      font-size: 0.95rem;
+      letter-spacing: 1.5px;
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+    }
+
+    .policy-col p, .policy-col ul {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .policy-col ul {
+      list-style: none;
+    }
+
+    .policy-col ul li {
+      margin-bottom: 0.4rem;
+    }
+
+    /* Form Styles */
+    .form-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-gold-bright);
+      border-radius: 14px;
+      padding: 2.5rem;
+      box-shadow: 0 15px 40px rgba(212, 175, 55, 0.15);
+    }
+
+    .form-title {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      letter-spacing: 2px;
+      text-align: center;
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+    }
+
+    .form-group {
+      margin-bottom: 1.3rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--gold-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+      width: 100%;
+      background: #000;
+      border: 1px solid var(--border-gold);
+      padding: 0.85rem 1rem;
+      color: #fff;
+      border-radius: 6px;
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+    }
+
+    .form-row {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    .addon-card {
+      background: rgba(212, 175, 55, 0.08);
+      border: 1px dashed var(--border-gold-bright);
+      padding: 1rem 1.2rem;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      margin-bottom: 1.3rem;
+    }
+
+    .addon-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .addon-checkbox input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--gold-primary);
+      cursor: pointer;
+    }
+
+    .addon-price {
+      font-family: var(--font-heading);
+      color: var(--gold-primary);
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .btn-gold {
+      width: 100%;
+      background: var(--gold-gradient);
+      color: #000;
+      padding: 1rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+    }
+
+    .btn-gold:hover {
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
+      transform: translateY(-2px);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      border-top: 1px solid var(--border-gold);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      background: #000;
+      margin-top: auto;
+    }
+
+    footer a {
+      color: var(--gold-primary);
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      .form-row { flex-direction: column; gap: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header>
+    <a href="index.html" class="logo-container">
+      <span class="brand-name gold-text">RIZZ<span class="brand-subscript">23</span></span>
+    </a>
+    <nav>
+      <a href="index.html">← Back to Main Experience</a>
+    </nav>
+  </header>
+
+  <!-- Hero Header -->
+  <section class="reservation-hero">
+    <h1 class="gold-text">Book Your Reservation</h1>
+    <p>Experience fine dining & VIP celebration packages crafted for distinction</p>
+    <div class="hours-badge">
+      Lunch Hours: 11:00 AM – 5:00 PM &nbsp;|&nbsp; Dinner Hours: 5:00 PM – 12:00 AM
+    </div>
+  </section>
+
+  <div class="content-wrapper">
+
+    <!-- Packages Showcase -->
+    <div>
+      <h2 class="packages-title gold-text">Celebration & Birthday Packages</h2>
+      
+      <div class="packages-grid">
+
+        <!-- Platinum Package -->
+        <div class="package-card platinum">
+          <div class="package-header">
+            <div class="package-name" style="color: #e5e4e2;">Rizz Platinum</div>
+            <div class="package-price">$55,000 JMD</div>
+            <div class="package-capacity">Max: 30 Guests</div>
+          </div>
+          <ul class="package-features">
+            <li>8x12 Sugar & Spice Cake</li>
+            <li>Balloon Arch</li>
+            <li>Light-Up Number</li>
+            <li>5ft Photo Backdrop / Welcome Sign</li>
+            <li>Elegant Chargers</li>
+            <li>Stylish Table Runners</li>
+            <li>Elaborate Centerpieces</li>
+          </ul>
+        </div>
+
+        <!-- Gold Package -->
+        <div class="package-card">
+          <div class="package-header">
+            <div class="package-name gold-text">Rizz Gold</div>
+            <div class="package-price">$38,000 JMD</div>
+            <div class="package-capacity">Max: 25 Guests</div>
+          </div>
+          <ul class="package-features">
+            <li>8x12 Sugar & Spice Cake</li>
+            <li>Balloon Arch</li>
+            <li>Light-Up Number</li>
+            <li>Elegant Chargers</li>
+            <li>Stylish Table Runners</li>
+            <li>Chic Centerpieces</li>
+          </ul>
+        </div>
+
+        <!-- Bronze Package -->
+        <div class="package-card">
+          <div class="package-header">
+            <div class="package-name" style="color: #cd7f32;">Rizz Bronze</div>
+            <div class="package-price">$25,000 JMD</div>
+            <div class="package-capacity">Max: 15 Guests</div>
+          </div>
+          <ul class="package-features">
+            <li>8x8 Sugar & Spice Cake</li>
+            <li>Simple Balloon Arch</li>
+            <li>Table Décor</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Policy Info -->
+      <div class="policy-box">
+        <div class="policy-col">
+          <h4>Payment Terms</h4>
+          <ul>
+            <li>• 50% deposit required 1 week in advance</li>
+            <li>• Balance due on the day of event</li>
+            <li>• Deposits are non-refundable</li>
+          </ul>
+        </div>
+        <div class="policy-col">
+          <h4>Late Arrival Policy</h4>
+          <ul>
+            <li>• 30-minute grace period for reserved slots</li>
+            <li>• After 30 minutes, table will no longer be available</li>
+            <li>• Guests must arrive within the 30-min window</li>
+          </ul>
+        </div>
+        <div class="policy-col">
+          <h4>Direct Reservation Contact</h4>
+          <p>Call or Text to Reserve Directly:</p>
+          <p style="font-size: 1.1rem; color: var(--gold-primary); font-weight: 700; margin-top: 0.3rem;">
+            📞 (876) 229-8555
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Booking Form connected to server.js -->
+    <div class="form-card">
+      <h2 class="form-title gold-text">Reserve Your Slot</h2>
+
+      <form id="reservation-form" onsubmit="handleReservationSubmit(event)">
+        
+        <!-- Guest Details -->
+        <div class="form-group">
+          <label for="res-name">Full Name</label>
+          <input type="text" id="res-name" class="form-control" placeholder="John Doe" required />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="res-email">Email Address</label>
+            <input type="email" id="res-email" class="form-control" placeholder="john@example.com" required />
+          </div>
+          <div class="form-group">
+            <label for="res-phone">Phone Number</label>
+            <input type="tel" id="res-phone" class="form-control" placeholder="(876) 000-0000" required />
+          </div>
+        </div>
+
+        <!-- Date & Slot -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="res-date">Reservation Date</label>
+            <input type="date" id="res-date" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label for="res-time">Booking Time Slot (60-Min Limit)</label>
+            <select id="res-time" class="form-control" required>
+              <option value="" disabled selected>Select a Time Slot</option>
+              <option value="5:00 PM">5:00 PM Slot</option>
+              <option value="7:00 PM">7:00 PM Slot</option>
+              <option value="9:00 PM">9:00 PM Slot</option>
+              <option value="11:00 PM">11:00 PM Slot</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Package & Guests -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="res-package">Select Package Option</label>
+            <select id="res-package" class="form-control">
+              <option value="Standard Table Reservation">Standard Table Reservation</option>
+              <option value="Rizz Bronze ($25,000 JMD)">Rizz Bronze Package ($25,000 JMD)</option>
+              <option value="Rizz Gold ($38,000 JMD)">Rizz Gold Package ($38,000 JMD)</option>
+              <option value="Rizz Platinum ($55,000 JMD)">Rizz Platinum Package ($55,000 JMD)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="res-guests">Number of Guests</label>
+            <input type="number" id="res-guests" class="form-control" min="1" max="30" placeholder="e.g. 10" required />
+          </div>
+        </div>
+
+        <!-- Theme Colors -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="res-color-1">Primary Theme Color</label>
+            <select id="res-color-1" class="form-control">
+              <option value="Gold">Gold</option>
+              <option value="Black">Black</option>
+              <option value="White">White</option>
+              <option value="Silver">Silver</option>
+              <option value="Rose Gold">Rose Gold</option>
+              <option value="Royal Blue">Royal Blue</option>
+              <option value="Emerald Green">Emerald Green</option>
+              <option value="Burgundy">Burgundy</option>
+              <option value="Purple">Purple</option>
+              <option value="Pink">Pink</option>
+              <option value="Red">Red</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="res-color-2">Secondary Theme Color (Pick Any 2)</label>
+            <select id="res-color-2" class="form-control">
+              <option value="None">None</option>
+              <option value="Gold">Gold</option>
+              <option value="Black">Black</option>
+              <option value="White">White</option>
+              <option value="Silver">Silver</option>
+              <option value="Rose Gold">Rose Gold</option>
+              <option value="Royal Blue">Royal Blue</option>
+              <option value="Emerald Green">Emerald Green</option>
+              <option value="Burgundy">Burgundy</option>
+              <option value="Purple">Purple</option>
+              <option value="Pink">Pink</option>
+              <option value="Red">Red</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="res-color-special">Custom Color / Special Theme Requests</label>
+          <input type="text" id="res-color-special" class="form-control" placeholder="e.g. Pastel Blush Pink & Champagne Gold accents..." />
+        </div>
+
+        <!-- Photography Addon -->
+        <label class="addon-card">
+          <div class="addon-checkbox">
+            <input type="checkbox" id="res-photo" />
+            <div>
+              <strong style="color: #fff; font-size: 0.95rem; display: block;">Add Professional Photographer</strong>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">Dedicated event photographer for your booking slot</span>
+            </div>
+          </div>
+          <div class="addon-price">+$12,000 JMD</div>
+        </label>
+
+        <!-- Special Requests -->
+        <div class="form-group">
+          <label for="res-notes">Special Occasion & Requests</label>
+          <textarea id="res-notes" class="form-control" rows="3" placeholder="Birthday name, cake message, dietary preferences..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-gold">Submit Reservation Request</button>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p class="gold-text" style="font-family: var(--font-heading); letter-spacing: 2px;">RIZZ23 ULTRA LOUNGE</p>
+    <p>23A Central Plaza, Half Way Tree | Phone: (876) 229-8555 / 876-225-2525</p>
+    <p style="margin-top: 1rem; color: #666;">&copy; 2026 Rizz23 Ultra Lounge. All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    async function handleReservationSubmit(event) {
+      event.preventDefault();
+
+      const submitBtn = event.target.querySelector('button[type="submit"]');
+      submitBtn.innerText = "Submitting...";
+      submitBtn.disabled = true;
+
+      const formData = {
+        fullName: document.getElementById('res-name').value,
+        email: document.getElementById('res-email').value,
+        phone: document.getElementById('res-phone').value,
+        date: document.getElementById('res-date').value,
+        timeSlot: document.getElementById('res-time').value,
+        package: document.getElementById('res-package').value,
+        guests: document.getElementById('res-guests').value,
+        primaryColor: document.getElementById('res-color-1').value,
+        secondaryColor: document.getElementById('res-color-2').value,
+        customColorRequest: document.getElementById('res-color-special').value,
+        addPhotographer: document.getElementById('res-photo').checked,
+        specialRequests: document.getElementById('res-notes').value
+      };
+
+      try {
+        const response = await fetch('/api/reservations', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          alert(`Thank you, ${formData.fullName}! Your reservation request has been submitted successfully. We will contact you at ${formData.phone} shortly to confirm.`);
+          document.getElementById('reservation-form').reset();
+        } else {
+          alert(`Failed to submit reservation: ${result.message || 'Please try again or call (876) 229-8555.'}`);
+        }
+      } catch (error) {
+        console.error('Error submitting reservation:', error);
+        alert('Network error occurred. Please check your connection or contact us directly at (876) 229-8555.');
+      } finally {
+        submitBtn.innerText = "Submit Reservation Request";
+        submitBtn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
