@@ -144,14 +144,31 @@ app.post('/api/create-payment', async (req, res) => {
       method: 'credit_card'
     };
 
-    console.log(`Processing WiPay payment for Order ${order_id} in ${WIPAY_ENVIRONMENT} mode.`);
+   const wipayResponse = await fetch('https://jm.wipayfinancial.com/plugins/payments/request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            account_number: WIPAY_ACCOUNT_NUMBER,
+            api_key: WIPAY_API_KEY,
+            environment: WIPAY_ENVIRONMENT,
+            country_code: 'JM',
+            currency: 'JMD',
+            fee_structure: 'customer_pay',
+            method: 'credit_card',
+            order_id,
+            origin: 'Rizz23 Ultra Lounge',
+            response_url: 'https://rizz23ultralounge.com/payment-complete',
+            total: parsedAmount.toFixed(2)
+        })
+    });
 
+    const wipayData = await wipayResponse.json();
+    
     return res.status(200).json({
-      success: true,
-      message: 'WiPay payment transaction initialized successfully.',
-      environment: WIPAY_ENVIRONMENT,
-      order_id,
-      amount: parsedAmount.toFixed(2)
+        success: true,
+        redirect_url: wipayData.url || wipayData.payment_url,
+        order_id,
+        amount: parsedAmount.toFixed(2)
     });
   } catch (error) {
     console.error('WiPay Payment Error:', error);
