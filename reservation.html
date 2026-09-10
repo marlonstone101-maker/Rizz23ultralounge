@@ -723,7 +723,7 @@
           window.location.href = result.redirect_url;
           return;
         } else {
-          alert('Failed to initiate payment. Please try again.');
+          alert('Error: ' + result.message || 'Failed to initialize payment.');
         }
 
       } catch (error) {
