@@ -572,11 +572,11 @@
         <div class="form-row">
           <div class="form-group">
             <label for="res-package">Select Package Option</label>
-            <select id="res-package" class="form-control">
-              <option value="Standard Table Reservation">Standard Table Reservation</option>
-              <option value="Rizz Bronze ($25,000 JMD)">Rizz Bronze Package ($25,000 JMD)</option>
-              <option value="Rizz Gold ($38,000 JMD)">Rizz Gold Package ($38,000 JMD)</option>
-              <option value="Rizz Platinum ($55,000 JMD)">Rizz Platinum Package ($55,000 JMD)</option>
+            <select id="res-package" class="form-control" onchange="calculateDeposit()">
+              <option value="Standard Table Reservation" data-price="0">Standard Table Reservation (No Deposit)</option>
+              <option value="Rizz Bronze ($25,000 JMD)" data-price="25000">Rizz Bronze Package ($25,000 JMD)</option>
+              <option value="Rizz Gold ($38,000 JMD)" data-price="38000">Rizz Gold Package ($38,000 JMD)</option>
+              <option value="Rizz Platinum ($55,000 JMD)" data-price="55000">Rizz Platinum Package ($55,000 JMD)</option>
             </select>
           </div>
           <div class="form-group">
@@ -630,7 +630,7 @@
         <!-- Photography Addon -->
         <label class="addon-card">
           <div class="addon-checkbox">
-            <input type="checkbox" id="res-photo" />
+            <input type="checkbox" id="res-photo" onchange="calculateDeposit()" />
             <div>
               <strong style="color: #fff; font-size: 0.95rem; display: block;">Add Professional Photographer</strong>
               <span style="font-size: 0.8rem; color: var(--text-muted);">Dedicated event photographer for your booking slot</span>
@@ -645,7 +645,7 @@
           <textarea id="res-notes" class="form-control" rows="3" placeholder="Birthday name, cake message, dietary preferences..."></textarea>
         </div>
 
-        <button type="submit" class="btn-gold">Submit Reservation Request</button>
+        <button type="submit" id="submit-btn" class="btn-gold">Pay 50% Deposit ($0 JMD) via WiPay</button>
       </form>
     </div>
 
@@ -659,11 +659,33 @@
   </footer>
 
   <script>
+    let calculatedDepositAmount = 0;
+
+    function calculateDeposit() {
+      const packageSelect = document.getElementById('res-package');
+      const selectedOption = packageSelect.options[packageSelect.selectedIndex];
+      const packagePrice = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+      
+      const photoAdded = document.getElementById('res-photo').checked;
+      const photoPrice = photoAdded ? 12000 : 0;
+
+      const totalPrice = packagePrice + photoPrice;
+      calculatedDepositAmount = totalPrice * 0.50;
+
+      const submitBtn = document.getElementById('submit-btn');
+      if (calculatedDepositAmount > 0) {
+        submitBtn.innerText = `Pay 50% Deposit ($${calculatedDepositAmount.toLocaleString()} JMD) via WiPay`;
+      } else {
+        submitBtn.innerText = "Submit Reservation Request";
+      }
+    }
+
     async function handleReservationSubmit(event) {
       event.preventDefault();
 
-      const submitBtn = event.target.querySelector('button[type="submit"]');
-      submitBtn.innerText = "Submitting...";
+      const submitBtn = document.getElementById('submit-btn');
+      const originalText = submitBtn.innerText;
+      submitBtn.innerText = "Redirecting to WiPay...";
       submitBtn.disabled = true;
 
       const formData = {
@@ -678,7 +700,8 @@
         secondaryColor: document.getElementById('res-color-2').value,
         customColorRequest: document.getElementById('res-color-special').value,
         addPhotographer: document.getElementById('res-photo').checked,
-        specialRequests: document.getElementById('res-notes').value
+        specialRequests: document.getElementById('res-notes').value,
+        depositAmount: calculatedDepositAmount
       };
 
       try {
@@ -686,10 +709,11 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            amount: 100,
+            amount: calculatedDepositAmount,
             order_id: 'RES-' + Date.now(),
             customer_email: formData.email,
-            phone: formData.phone
+            phone: formData.phone,
+            details: formData
           })
         });
 
@@ -698,16 +722,21 @@
         if (result.url) {
           window.location.href = result.url;
           return;
+        } else {
+          alert('Failed to initiate payment. Please try again.');
         }
 
-         } catch (error) {
+      } catch (error) {
         console.error('Error submitting reservation:', error);
         alert('Network error occurred. Please check your connection or contact us directly at (876) 229-8555.');
       } finally {
-        submitBtn.innerText = "Submit Reservation Request";
+        submitBtn.innerText = originalText;
         submitBtn.disabled = false;
       }
     }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', calculateDeposit);
   </script>
 </body>
 </html>
