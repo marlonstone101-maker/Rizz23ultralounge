@@ -700,13 +700,7 @@
           return;
         }
 
-        if (response.ok) {
-          alert(`Thank you, ${formData.fullName}! Your reservation request has been submitted successfully. We will contact you at ${formData.phone} shortly to confirm.`);
-          document.getElementById('reservation-form').reset();
-        } else {
-          alert(`Failed to submit reservation: ${result.message || 'Please try again or call (876) 229-8555.'}`);
-        }
-      } catch (error) {
+         } catch (error) {
         console.error('Error submitting reservation:', error);
         alert('Network error occurred. Please check your connection or contact us directly at (876) 229-8555.');
       } finally {
