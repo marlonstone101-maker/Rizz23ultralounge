@@ -1163,7 +1163,7 @@
       modal.style.display = "none";
     }
 
-    async function processCardPayment(e) {
+    function processCardPayment(e) {
       e.preventDefault();
 
       const name = document.getElementById("card-name").value;
@@ -1179,46 +1179,15 @@
         return;
       }
 
-      try {
-        const response = await fetch('https://rizz23ultralounge.onrender.com/api/create-order', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            customerName: name,
-            customerEmail: email,
-            deliveryNotes: delivery,
-            itemName: itemName,
-            amount: amount
-          }),
-        });
+      closePaymentModal();
 
-        const result = await response.json();
+      const returnUrl = encodeURIComponent("https://rizz23ultralounge.onrender.com/api/wipay-callback");
 
-        if (result.success) {
-          await db.collection("orders").add({
-            customerName: name,
-            customerEmail: email,
-            tableOrAddress: delivery,
-            item: itemName,
-            price: priceRaw,
-            status: "Sent to Kitchen",
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-          });
+      const baseUrl = WIPAY_ENVIRONMENT === "live" 
+        ? "https://jm.wipayfinancial.com/plugins/payments/pay" 
+        : "https://sandbox.wipayfinancial.com/plugins/payments/pay";
 
-          closePaymentModal();
-          
-          const baseUrl = WIPAY_ENVIRONMENT === "live" 
-            ? "https://jm.wipayfinancial.com/plugins/payments/pay" 
-            : "https://sandbox.wipayfinancial.com/plugins/payments/pay";
-
-          window.location.href = `${baseUrl}?account_id=${WIPAY_ACCOUNT_ID}&total=${amount}&currency=JMD&name=${encodeURIComponent(itemName)}&customer_name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&note=${encodeURIComponent(delivery)}`;
-        } else {
-          alert("Error sending order to POS: " + result.error);
-        }
-      } catch (err) {
-        console.error("Order dispatch failed:", err);
-        alert("Network error: Unable to connect to server. Please try again.");
-      }
+      window.location.href = `${baseUrl}?account_id=${WIPAY_ACCOUNT_ID}&total=${amount}&currency=JMD&name=${encodeURIComponent(itemName)}&customer_name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&note=${encodeURIComponent(delivery)}&return_url=${returnUrl}`;
     }
 
     function filterMenu(category) {
