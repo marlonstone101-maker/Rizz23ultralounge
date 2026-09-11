@@ -154,13 +154,15 @@ app.post('/api/create-payment', async (req, res) => {
       body: formBody
     });
 
-    const wipayData = await wipayResponse.json();
-console.log('WiPayData:', wipayData);
+   const responseText = await wipayResponse.text();
+    console.log('Raw WiPay Response:', responseText);
+    const wipayData = JSON.parse(responseText);
+    
     return res.status(200).json({
-      success: true,
-      redirect_url: wipayData.url || wipayData.payment_url,
-      order_id,
-      amount: parsedAmount.toFixed(2)
+        success: true,
+        redirect_url: wipayData.url || wipayData.payment_url,
+        order_id,
+        amount: parsedAmount.toFixed(2)
     });
   } catch (error) {
     console.error('WiPay Payment Error:', error);
