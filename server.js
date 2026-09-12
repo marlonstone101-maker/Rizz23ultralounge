@@ -97,7 +97,7 @@ app.post('/api/reserve', async (req, res) => {
 
   const mailOptions = {
     from: EMAIL_USER,
-    to: 'reservations@rizz23ultralounge.com',
+    to: 'rizz23ultralounge@gmail.com',
     replyTo: email,
     subject: `New Table Reservation Request - ${name}`,
     text: `Name: ${name}\nEmail: ${email}\nDate: ${date}\nTime: ${time}\nGuests: ${guests}`,
