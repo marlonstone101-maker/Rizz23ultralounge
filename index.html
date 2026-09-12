@@ -178,6 +178,81 @@
       border-color: var(--gold-primary);
     }
 
+    /* Floating Cart Button & Modal Styles */
+    .cart-float-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      z-index: 1500;
+      background: var(--gold-gradient);
+      color: #000;
+      border: none;
+      padding: 0.9rem 1.4rem;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: transform 0.2s ease;
+    }
+
+    .cart-float-btn:active {
+      transform: scale(0.95);
+    }
+
+    .cart-badge {
+      background: #000;
+      color: var(--gold-light);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-qty {
+      background: rgba(212, 175, 55, 0.2);
+      border: 1px solid var(--border-gold);
+      color: var(--gold-light);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cart-items-list {
+      max-height: 240px;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+      padding-right: 5px;
+    }
+
+    .cart-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+    }
+
     /* Keyframes for Golden Light Sweep & Tag Glow */
     @keyframes goldPulseGlow {
       0% {
@@ -757,6 +832,8 @@
       padding: 2.5rem;
       width: 100%;
       max-width: 550px;
+      max-height: 90vh;
+      overflow-y: auto;
       position: relative;
       box-shadow: 0 15px 40px rgba(212, 175, 55, 0.2);
     }
@@ -807,9 +884,19 @@
       .hero-hero-logo { width: 260px; }
       .menu-grid { grid-template-columns: 1fr; }
     }
+
+    @media (max-width: 600px) {
+      .modal-card { padding: 1.5rem; }
+      .cart-float-btn { bottom: 15px; right: 15px; padding: 0.75rem 1.1rem; font-size: 0.75rem; }
+    }
   </style>
 </head>
 <body onload="initApp()">
+
+  <!-- Floating Cart Button -->
+  <button class="cart-float-btn" onclick="openPaymentModal()">
+    🛒 View Cart <span class="cart-badge" id="cart-count">0</span>
+  </button>
 
   <!-- Navigation Bar -->
   <header>
@@ -962,20 +1049,21 @@
     </div>
   </section>
 
-  <!-- Payment Modal Overlay -->
+  <!-- Cart / Payment Modal Overlay -->
   <div class="modal-overlay" id="payment-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closePaymentModal()">&times;</button>
-      <h3 class="gold-text" style="font-family: var(--font-heading); font-size: 1.6rem; margin-bottom: 1.5rem; text-align: center;">Card Checkout</h3>
+      <h3 class="gold-text" style="font-family: var(--font-heading); font-size: 1.6rem; margin-bottom: 1.5rem; text-align: center;">Your Order Summary</h3>
       
       <form id="card-checkout-form" onsubmit="processCardPayment(event)">
-        <input type="hidden" id="pay-item-name" />
-        <input type="hidden" id="pay-item-price" />
-
         <div style="margin-bottom: 1.5rem; background: #000; padding: 1rem; border-radius: 6px; border: 1px solid var(--border-gold);">
-          <p style="font-size: 0.85rem; color: var(--text-muted);">Selected Item/Service:</p>
-          <p id="checkout-summary-name" style="font-weight: 600; color: #fff;"></p>
-          <p id="checkout-summary-price" style="font-size: 1.2rem; font-weight: 700; color: var(--gold-primary); margin-top: 0.2rem;"></p>
+          <div id="cart-items-container" class="cart-items-list">
+            <!-- Dynamically populates items in cart -->
+          </div>
+          <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--border-gold); padding-top: 0.8rem; margin-top: 0.5rem;">
+            <span style="font-weight: 600; color: #fff;">Total:</span>
+            <span id="checkout-summary-price" style="font-size: 1.2rem; font-weight: 700; color: var(--gold-primary);">$0.00</span>
+          </div>
         </div>
 
         <div class="form-group">
@@ -1080,6 +1168,7 @@
     window.isAdminLoggedIn = false;
     let uploadedBase64Image = "";
     let currentMenuItems = [];
+    let cart = [];
 
     function initApp() {
       db.collection("menuItems").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
@@ -1097,6 +1186,7 @@
       }, (error) => {
         console.error("Firestore Listen Error: ", error);
       });
+      updateCartUI();
     }
 
     window.addEventListener("hashchange", () => {
@@ -1130,8 +1220,8 @@
             <h3 class="item-title">${item.name}</h3>
             <p class="item-desc">${item.description}</p>
             <div class="card-actions">
-              <button class="btn-order-item" onclick="openPaymentModal('${item.id}', '${item.name}', '${item.price}')">
-                ORDER NOW
+              <button class="btn-order-item" onclick="addToCart('${item.id}', '${item.name.replace(/'/g, "\\'")}', '${item.price}')">
+                ADD TO CART
               </button>
               ${window.isAdminLoggedIn ? `
                 <div class="admin-actions-group">
@@ -1146,12 +1236,69 @@
       });
     }
 
-    function openPaymentModal(id, name, price) {
-      document.getElementById("pay-item-name").value = name;
-      document.getElementById("pay-item-price").value = price;
-      document.getElementById("checkout-summary-name").innerText = name;
-      document.getElementById("checkout-summary-price").innerText = price;
+    function addToCart(id, name, price) {
+      const numPrice = parseFloat(price.replace(/[^0-9.]/g, '')) || 0;
+      const existing = cart.find(item => item.id === id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ id, name, price: numPrice, qty: 1 });
+      }
+      updateCartUI();
+    }
 
+    function updateCartQuantity(id, change) {
+      const index = cart.findIndex(item => item.id === id);
+      if (index !== -1) {
+        cart[index].qty += change;
+        if (cart[index].qty <= 0) {
+          cart.splice(index, 1);
+        }
+      }
+      updateCartUI();
+      renderCartItems();
+    }
+
+    function updateCartUI() {
+      const count = cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById("cart-count").innerText = count;
+    }
+
+    function renderCartItems() {
+      const container = document.getElementById("cart-items-container");
+      container.innerHTML = "";
+      
+      if (cart.length === 0) {
+        container.innerHTML = `<p style="text-align:center; color: var(--text-muted); font-size: 0.9rem;">Your cart is empty.</p>`;
+        document.getElementById("checkout-summary-price").innerText = "$0.00";
+        return;
+      }
+
+      let total = 0;
+      cart.forEach(item => {
+        const itemTotal = item.price * item.qty;
+        total += itemTotal;
+        const row = document.createElement("div");
+        row.className = "cart-item-row";
+        row.innerHTML = `
+          <div>
+            <p style="font-weight: 600; color: #fff; font-size: 0.9rem;">${item.name}</p>
+            <p style="font-size: 0.8rem; color: var(--gold-primary);">$${item.price.toFixed(2)} each</p>
+          </div>
+          <div class="quantity-control">
+            <button type="button" class="btn-qty" onclick="updateCartQuantity('${item.id}', -1)">-</button>
+            <span style="font-size: 0.85rem; color: #fff; min-width: 18px; text-align: center;">${item.qty}</span>
+            <button type="button" class="btn-qty" onclick="updateCartQuantity('${item.id}', 1)">+</button>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+
+      document.getElementById("checkout-summary-price").innerText = `$${total.toFixed(2)}`;
+    }
+
+    function openPaymentModal() {
+      renderCartItems();
       const modal = document.getElementById("payment-modal");
       modal.classList.add("active");
       modal.style.display = "flex";
@@ -1166,15 +1313,19 @@
     function processCardPayment(e) {
       e.preventDefault();
 
+      if (cart.length === 0) {
+        alert("Your cart is empty. Please add items before checking out.");
+        return;
+      }
+
       const name = document.getElementById("card-name").value;
       const email = document.getElementById("card-email").value;
       const delivery = document.getElementById("delivery-info").value;
-      const itemName = document.getElementById("pay-item-name").value;
-      const priceRaw = document.getElementById("pay-item-price").value;
 
-      const amount = parseFloat(priceRaw.replace(/[^0-9.]/g, '')) || 0;
+      const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      const orderSummary = cart.map(item => `${item.qty}x ${item.name}`).join(", ");
 
-      if (amount <= 0) {
+      if (totalAmount <= 0) {
         alert("Invalid transaction amount.");
         return;
       }
@@ -1187,7 +1338,7 @@
         ? "https://jm.wipayfinancial.com/plugins/payments/pay" 
         : "https://sandbox.wipayfinancial.com/plugins/payments/pay";
 
-      window.location.href = `${baseUrl}?account_id=${WIPAY_ACCOUNT_ID}&total=${amount}&currency=JMD&name=${encodeURIComponent(itemName)}&customer_name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&note=${encodeURIComponent(delivery)}&return_url=${returnUrl}`;
+      window.location.href = `${baseUrl}?account_id=${WIPAY_ACCOUNT_ID}&total=${totalAmount.toFixed(2)}&currency=JMD&name=${encodeURIComponent(orderSummary)}&customer_name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&note=${encodeURIComponent(delivery)}&return_url=${returnUrl}`;
     }
 
     function filterMenu(category) {
