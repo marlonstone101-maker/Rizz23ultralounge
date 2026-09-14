@@ -1541,7 +1541,7 @@
       const rightContent = document.getElementById("right-page-content");
       leftContent.innerHTML = "";
       rightContent.innerHTML = "";
-
+document.getElementById("menu")?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       if (paginatedSpreads.length === 0) {
         leftContent.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding: 2rem 0;">No menu items found.</p>`;
         document.getElementById("book-page-num").innerText = "Page 1";
