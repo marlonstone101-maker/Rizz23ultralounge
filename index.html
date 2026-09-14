@@ -253,7 +253,7 @@
       border-bottom: 1px solid rgba(212, 175, 55, 0.15);
     }
 
-    /* Keyframes for Golden Light Sweep & Tag Glow */
+    /* Keyframes for Golden Light Sweep */
     @keyframes goldPulseGlow {
       0% {
         box-shadow: 0 0 20px rgba(212, 175, 55, 0.4), 
@@ -471,38 +471,9 @@
       margin: 0 auto;
     }
 
-    .filter-container {
-      display: flex;
-      justify-content: center;
-      gap: 0.8rem;
-      margin-bottom: 3rem;
-      flex-wrap: wrap;
-    }
-
-    .filter-btn {
-      background: transparent;
-      border: 1px solid var(--border-gold);
-      color: var(--text-light);
-      padding: 0.6rem 1.6rem;
-      border-radius: 25px;
-      cursor: pointer;
-      font-family: var(--font-sans);
-      font-size: 0.8rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      transition: all 0.3s ease;
-    }
-
-    .filter-btn.active, .filter-btn:hover {
-      background: var(--gold-gradient);
-      color: #000;
-      border-color: transparent;
-      font-weight: 600;
-    }
-
     .menu-book-wrapper {
       perspective: 2000px;
-      max-width: 1000px;
+      max-width: 1100px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
@@ -511,7 +482,7 @@
 
     .book-container {
       width: 100%;
-      min-height: 600px;
+      min-height: 650px;
       position: relative;
       transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
       transform-style: preserve-3d;
@@ -565,14 +536,15 @@
       margin-bottom: 1.5rem;
     }
 
+    /* Elegant Authentic Restaurant Menu Page Spread */
     .book-pages-spread {
       display: none;
       width: 100%;
-      min-height: 620px;
-      background: #0d0d0d;
-      border: 1px solid var(--border-gold-bright);
+      min-height: 650px;
+      background: #0f0f0f;
+      border: 2px solid var(--gold-primary);
       border-radius: 12px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.9), inset 0 0 100px rgba(0,0,0,0.8);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.95), inset 0 0 80px rgba(0,0,0,0.8);
       position: relative;
       overflow: hidden;
     }
@@ -583,21 +555,62 @@
 
     .book-page {
       flex: 1;
-      padding: 2.5rem;
+      padding: 2.5rem 3rem;
       display: flex;
       flex-direction: column;
       position: relative;
       overflow-y: auto;
-      max-height: 620px;
+      max-height: 750px;
+      background-color: #121212;
+      background-image: radial-gradient(circle at center, rgba(18, 18, 18, 0.88) 0%, #121212 90%), url('logo.png');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: 260px auto;
     }
 
     .book-page-left {
-      border-right: 1px solid rgba(212, 175, 55, 0.2);
-      background: linear-gradient(90deg, rgba(0,0,0,0.4) 0%, rgba(20,20,20,0.1) 100%);
+      border-right: 1px solid rgba(212, 175, 55, 0.3);
+      box-shadow: inset -15px 0 25px rgba(0,0,0,0.5);
     }
 
     .book-page-right {
-      background: linear-gradient(-90deg, rgba(0,0,0,0.4) 0%, rgba(20,20,20,0.1) 100%);
+      box-shadow: inset 15px 0 25px rgba(0,0,0,0.5);
+    }
+
+    .book-page-inner-border {
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      padding: 1.5rem;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .book-header-logo-container {
+      text-align: center;
+      margin-bottom: 0.8rem;
+    }
+
+    .book-header-logo {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      border: 1px solid var(--gold-primary);
+    }
+
+    .book-page-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-gold);
+      padding-bottom: 0.8rem;
+    }
+
+    .book-page-header h4 {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+      color: var(--gold-light);
+      text-transform: uppercase;
     }
 
     .book-spine-line {
@@ -605,75 +618,122 @@
       left: 50%;
       top: 0;
       bottom: 0;
-      width: 2px;
-      background: linear-gradient(180deg, transparent, var(--gold-primary), transparent);
+      width: 3px;
+      background: linear-gradient(180deg, rgba(212, 175, 55, 0.1), var(--gold-primary), rgba(212, 175, 55, 0.1));
       z-index: 5;
+    }
+
+    .book-section-container {
+      margin-bottom: 2rem;
+    }
+
+    .book-section-title {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      color: var(--gold-primary);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 0.4rem;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+      padding-bottom: 0.2rem;
+    }
+
+    .book-section-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .book-item-list {
       display: flex;
       flex-direction: column;
-      gap: 1.8rem;
-    }
-
-    .book-item-card {
-      display: flex;
-      align-items: center;
       gap: 1.2rem;
-      background: rgba(20, 20, 20, 0.6);
-      border: 1px solid var(--border-gold);
-      padding: 1.2rem;
-      border-radius: 12px;
-      transition: border-color 0.3s ease, transform 0.3s ease;
     }
 
-    .book-item-card:hover {
-      border-color: var(--border-gold-bright);
-      transform: translateY(-2px);
-    }
-
-    .book-item-img {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid var(--gold-primary);
-      flex-shrink: 0;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    }
-
-    .book-item-info {
-      flex-grow: 1;
+    .restaurant-menu-item {
       display: flex;
       flex-direction: column;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px dashed rgba(212, 175, 55, 0.2);
+      position: relative;
     }
 
-    .book-item-header {
+    .restaurant-menu-item.out-of-stock {
+      opacity: 0.5;
+    }
+
+    .restaurant-menu-header {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.2rem;
     }
 
-    .book-item-title {
+    .restaurant-menu-title {
       font-family: var(--font-serif);
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       font-weight: 600;
-      color: #fff;
+      color: #FFFFFF;
+      letter-spacing: 1px;
     }
 
-    .book-item-price {
+    .restaurant-dots {
+      flex-grow: 1;
+      border-bottom: 1px dotted rgba(212, 175, 55, 0.4);
+      margin: 0 10px;
+    }
+
+    .restaurant-menu-price {
       font-family: var(--font-heading);
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 1rem;
       color: var(--gold-primary);
     }
 
-    .book-item-desc {
+    .restaurant-menu-desc {
       color: var(--text-muted);
       font-size: 0.8rem;
-      line-height: 1.4;
-      margin-bottom: 0.8rem;
+      line-height: 1.3;
+      font-style: italic;
+      margin-bottom: 0.5rem;
+    }
+
+    .restaurant-item-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-add-cart-menu {
+      background: transparent;
+      border: 1px solid var(--gold-primary);
+      color: var(--gold-light);
+      padding: 0.35rem 0.85rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-add-cart-menu:hover {
+      background: var(--gold-gradient);
+      color: #000;
+      border-color: transparent;
+      font-weight: 600;
+    }
+
+    .out-stock-badge {
+      font-size: 0.7rem;
+      color: #ff6b6b;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
     }
 
     .book-pagination {
@@ -712,52 +772,21 @@
       color: var(--text-muted);
     }
 
-    .card-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: auto;
-      padding-top: 0.5rem;
-    }
-
-    .btn-order-item {
-      width: 100%;
-      background: transparent;
-      border: 1px solid var(--gold-primary);
-      color: var(--gold-primary);
-      padding: 0.55rem;
-      border-radius: 6px;
-      font-weight: 600;
-      cursor: pointer;
-      text-transform: uppercase;
-      font-size: 0.75rem;
-      letter-spacing: 1.5px;
-      transition: all 0.3s ease;
-      text-align: center;
-    }
-
-    .btn-order-item:hover {
-      background: var(--gold-gradient);
-      color: #000;
-      border-color: transparent;
-    }
-
     .admin-actions-group {
       display: flex;
-      gap: 8px;
+      gap: 6px;
+      margin-top: 4px;
     }
 
     .btn-admin-action {
-      flex: 1;
       background: rgba(212, 175, 55, 0.1);
       border: 1px solid var(--border-gold);
       color: var(--gold-light);
-      padding: 0.4rem 0.6rem;
-      border-radius: 6px;
-      font-size: 0.7rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.65rem;
       cursor: pointer;
       transition: all 0.2s ease;
-      text-align: center;
     }
 
     .btn-admin-action:hover {
@@ -1012,8 +1041,6 @@
     @media (max-width: 600px) {
       .modal-card { padding: 1.5rem; }
       .cart-float-btn { bottom: 15px; right: 15px; padding: 0.75rem 1.1rem; font-size: 0.75rem; }
-      .book-item-card { flex-direction: column; text-align: center; }
-      .book-item-header { flex-direction: column; align-items: center; gap: 0.2rem; }
     }
   </style>
 </head>
@@ -1088,18 +1115,10 @@
     </div>
   </section>
 
-  <!-- Dynamic Menu Section (Book Layout Transformation) -->
+  <!-- Dynamic Menu Section (3D Restaurant Menu Book Layout) -->
   <section class="menu-container" id="menu">
     <h2 class="section-title gold-text">Curated Culinary Menu</h2>
     <p class="section-subtitle">Lunch: 11 AM - 5 PM | Dinner: 5 PM - 12 AM</p>
-
-    <!-- Interactive Filter Buttons -->
-    <div class="filter-container" id="filter-buttons">
-      <button class="filter-btn active" onclick="filterMenu('Appetizers')">Appetizers</button>
-      <button class="filter-btn" onclick="filterMenu('Lunch')">Lunch</button>
-      <button class="filter-btn" onclick="filterMenu('Dinner')">Dinner</button>
-      <button class="filter-btn" onclick="filterMenu('Drinks & VIP')">Drinks, shots & Cocktail</button>
-    </div>
 
     <!-- 3D Book Interactive Wrapper -->
     <div class="menu-book-wrapper">
@@ -1107,21 +1126,41 @@
         <!-- Closed Book Front Cover -->
         <div class="book-cover" onclick="openMenuBook()">
           <div class="book-cover-content">
-            <img src="logo.png" class="book-cover-logo" alt="Rizz23" />
+            <img src="logo.png" class="book-cover-logo" alt="Rizz23 Logo" />
             <h3 class="gold-text" style="font-family: var(--font-heading); font-size: 1.8rem; letter-spacing: 3px; margin-bottom: 0.5rem;">RIZZ23</h3>
-            <p style="font-family: var(--font-serif); font-style: italic; color: var(--gold-light); letter-spacing: 2px;">CULINARY SELECTIONS</p>
-            <p style="margin-top: 2rem; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px;">❖ Click To Open Menu ❖</p>
+            <p style="font-family: var(--font-serif); font-style: italic; color: var(--gold-light); letter-spacing: 2px;">FINE DINING & LOUNGE MENU</p>
+            <p style="margin-top: 2rem; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px;">❖ Click To Open Menu Book ❖</p>
           </div>
         </div>
 
         <!-- Open Book Page Spread -->
         <div class="book-pages-spread">
           <div class="book-spine-line"></div>
+          
+          <!-- Left Menu Page -->
           <div class="book-page book-page-left" id="book-page-left">
-            <div class="book-item-list" id="menu-left-list"></div>
+            <div class="book-page-inner-border">
+              <div class="book-header-logo-container">
+                <img src="logo.png" alt="Rizz23 Logo" class="book-header-logo" />
+              </div>
+              <div class="book-page-header">
+                <h4>RIZZ23 ULTRA LOUNGE</h4>
+              </div>
+              <div id="left-page-content"></div>
+            </div>
           </div>
+          
+          <!-- Right Menu Page -->
           <div class="book-page book-page-right" id="book-page-right">
-            <div class="book-item-list" id="menu-right-list"></div>
+            <div class="book-page-inner-border">
+              <div class="book-header-logo-container">
+                <img src="logo.png" alt="Rizz23 Logo" class="book-header-logo" />
+              </div>
+              <div class="book-page-header">
+                <h4>RIZZ23 ULTRA LOUNGE</h4>
+              </div>
+              <div id="right-page-content"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -1258,27 +1297,26 @@
           <div class="form-group" style="flex: 1;">
             <label>Category</label>
             <select id="admin-item-category" class="form-control" required>
+              <option value="Dinner Selection">Dinner Selection</option>
+              <option value="Shaken Cocktails">Shaken Cocktails</option>
+              <option value="Margaritas & Martinis">Margaritas & Martinis</option>
+              <option value="Wines & Creamy">Wines & Creamy</option>
+              <option value="Shots">Shots</option>
+              <option value="Beer & Stout">Beer & Stout</option>
               <option value="Appetizers">Appetizers</option>
-              <option value="Lunch">Lunch</option>
-              <option value="Dinner">Dinner</option>
-              <option value="Drinks & VIP">Drinks & VIP</option>
+              <option value="Rizz23 Sandwiches, Burgers, Pasta & Extras">Rizz23 Sandwiches, Burgers, Pasta & Extras</option>
+              <option value="Sides & Add-Ons">Sides & Add-Ons</option>
             </select>
           </div>
           <div class="form-group" style="flex: 1;">
             <label>Price ($)</label>
-            <input type="text" id="admin-item-price" class="form-control" placeholder="e.g. $120" required />
+            <input type="text" id="admin-item-price" class="form-control" placeholder="e.g. $1,800.00" required />
           </div>
         </div>
 
         <div class="form-group">
-          <label>Description</label>
-          <textarea id="admin-item-desc" class="form-control" rows="2" placeholder="Item ingredient notes or luxury serving style..." required></textarea>
-        </div>
-
-        <div class="form-group">
-          <label>Image Source Option</label>
-          <input type="text" id="admin-item-image-url" class="form-control" placeholder="Paste Image URL or Leave Empty to Upload File" />
-          <input type="file" id="admin-item-image-file" class="form-control" accept="image/*" style="margin-top: 8px;" onchange="convertFileToBase64(this)" />
+          <label>Description / Ingredients</label>
+          <textarea id="admin-item-desc" class="form-control" rows="2" placeholder="List spirits, mixers, or food details..."></textarea>
         </div>
 
         <button type="submit" class="btn-gold" style="width: 100%; border-radius: 6px; margin-top: 1rem;">Add Item To Live Menu</button>
@@ -1323,12 +1361,127 @@
     const auth = firebase.auth();
 
     window.isAdminLoggedIn = false;
-    let uploadedBase64Image = "";
     let currentMenuItems = [];
-    let activeFilteredItems = [];
     let cart = [];
     let currentBookPageIndex = 0;
-    const itemsPerPageSpread = 4; // 2 items on left page, 2 items on right page
+
+    // Categories in explicit requested order
+    const categoryOrder = [
+      "Dinner Selection",
+      "Shaken Cocktails",
+      "Margaritas & Martinis",
+      "Wines & Creamy",
+      "Shots",
+      "Beer & Stout",
+      "Appetizers",
+      "Rizz23 Sandwiches, Burgers, Pasta & Extras",
+      "Sides & Add-Ons"
+    ];
+
+    // Menu Item Database matching exact images provided
+    const initialSeedData = [
+      // 1. Dinner Selection (formerly Entrees)
+      { category: "Dinner Selection", name: "Slow-Braised Curried Goat", price: "$2,700.00", description: "Rich, aromatic mutton slow-cooked until fork-tender", subtitle: "EACH ENTREE IS SERVED WITH 1 SIDE OF YOUR CHOICE AND SEASONAL SAUTEED VEGETABLES", available: true },
+      { category: "Dinner Selection", name: "Tender Oxtail & Butter Beans", price: "$3,000.00", description: "Melt-off-the-bone oxtail in a savoury reduction with butter beans", available: true },
+      { category: "Dinner Selection", name: "Rizz23 Hickory-Glazed Baby Back Ribs", price: "$4,500.00", description: "Pork ribs smoked low and slow, finished with house glaze", available: true },
+      { category: "Dinner Selection", name: "Succulent Shrimp", price: "$2,700.00", description: "Garlic, Curried, Honey Garlic, Creamy Coconut, Crispy Coconut, Curried Coconut. Plump, succulent prawns prepared your way", available: true },
+      { category: "Dinner Selection", name: "Atlantic Salmon", price: "$3,500.00", description: "Garlic Butter, Honey Glazed, Coconut, Grilled. Premium fillet, seared to a golden finish", available: true },
+      { category: "Dinner Selection", name: "Catch of the Day", price: "$4,500.00 upwards", description: "Escovitch, Steamed, Brown Stew, Roasted, Curried. Fresh local fish, chef-prepared daily", available: true },
+      { category: "Dinner Selection", name: "Caribbean Lobster", price: "$4,500.00", description: "Garlic, Curried, Honey Garlic, Creamy Coconut, Curried Coconut. Whole lobster, fresh from Caribbean waters (*Available Seasonally)", available: true },
+      { category: "Dinner Selection", name: "Crispy Chicken", price: "$1,700.00", description: "Crispy, Barbecue, Spicy Barbecue. Fried chicken seasoned with island spice", available: true },
+      { category: "Dinner Selection", name: "Rizz23 Signature Wings", price: "$2,200.00", description: "6 Chicken wings served with french fries. Crispy, BBQ, Spicy BBQ", available: true },
+
+      // 2. Shaken Cocktails
+      { category: "Shaken Cocktails", name: "Horny & Blue (Bahama Mama)", price: "$1,800.00", description: "Triple Sec, Blue Curacao, Old Tom Gin, Tequila Gold, Vodka, Wray & Nephew White Overproof Rum", available: true },
+      { category: "Shaken Cocktails", name: "Seductive Touch (Long Island Iced Tea)", price: "$1,500.00", description: "Kingston 62, Peach Schnapps, Triple Sec, Kingston 62 Genesis, Myer's Rum", available: true },
+      { category: "Shaken Cocktails", name: "Deep Blue Sea", price: "$1,800.00", description: "Kingston 62, Peach Schnapps, Triple Sec, Kingston 62 Genesis, Blue Curacao, Malibu/Cocomania, Sour Apple Schnapps", available: true },
+      { category: "Shaken Cocktails", name: "69 Ways to Cry/Smile", price: "$1,800.00", description: "Triple Sec, Vodka, Bombay Sapphire Gin, Jack Daniels, Myer's Rum, Cocomania, Appleton Special, Kingston 62 Genesis, Jack Daniels Honey, D&G Sorrel Rum, Tequila Silver, Moneymusk Gold Rum, Wray & Nephew White Overproof Rum, Dewar's White Label", available: true },
+      { category: "Shaken Cocktails", name: "Planter's Punch", price: "$1,600.00", description: "Tequila mix, citrus accents, and tropical finish", available: true },
+      { category: "Shaken Cocktails", name: "Drunken Cucumber", price: "$1,600.00", description: "Angostura Bitters, Myer's Rum, Kingston 62, Wray & Nephew White Overproof Rum", available: true },
+      { category: "Shaken Cocktails", name: "Hawaiian Paradise", price: "$1,600.00", description: "Peach Schnapps, Blue Curacao, Triple Sec, Kingston 62, Cocomania", available: true },
+      { category: "Shaken Cocktails", name: "Passionate (Whiskey Sour)", price: "$1,600.00", description: "Triple Sec, Dewar's Whiskey", available: true },
+      { category: "Shaken Cocktails", name: "Long Beach Iced Tea", price: "$1,800.00", description: "Triple Sec, Blue Curacao, Old Tom Gin, Tequila Gold, Vodka, Wray & Nephew White Overproof Rum", available: true },
+      { category: "Shaken Cocktails", name: "Big Boy (Amaretto Sour)", price: "$1,400.00", description: "Amaretto, Vodka", available: true },
+
+      // 3. Margaritas & Martinis
+      { category: "Margaritas & Martinis", name: "Margaritas (Mango | Strawberry | Passion)", price: "$1,600.00", description: "Triple Sec, Tequila Gold", available: true },
+      { category: "Margaritas & Martinis", name: "Apple Martini", price: "$1,800.00", description: "Sour Apple Schnapps, Apple Vodka, Pineapple juice", available: true },
+      { category: "Margaritas & Martinis", name: "Desire (Lychee Martini)", price: "$1,800.00", description: "Triple Sec, Kingston 62 Genesis, Lychee juice", available: true },
+      { category: "Margaritas & Martinis", name: "Cosmopolitan", price: "$1,800.00", description: "Triple Sec, Vodka, Wray & Nephew White Overproof Rum", available: true },
+
+      // 4. Wines & Creamy
+      { category: "Wines & Creamy", name: "Red Wine (per glass)", price: "$2,000.00", description: "House selected full-bodied red", available: true },
+      { category: "Wines & Creamy", name: "White Wine (per glass)", price: "$2,000.00", description: "Chilled premium white wine blend", available: true },
+      { category: "Wines & Creamy", name: "Toasted Almond (Mudslide)", price: "$1,800.00", description: "Amaretto, Bailey's Rum Cream, Milk", available: true },
+      { category: "Wines & Creamy", name: "Lick & Glide", price: "$1,600.00", description: "Ice Cream, Vodka, Sangster's Rum Cream", available: true },
+      { category: "Wines & Creamy", name: "Find The Spot", price: "$1,500.00", description: "Amaretto, Ice Cream, Sangster's Banana Rum Cream, Kingston 62 Genesis, Wray & Nephew White Overproof Rum", available: true },
+
+      // 5. Shots
+      { category: "Shots", name: "Flatliner", price: "$1,000.00", description: "Tequila Gold, Sambuca White, Tabasco Pepper Sauce", available: true },
+      { category: "Shots", name: "Fire & Ice", price: "$1,000.00", description: "Kahlua, Fireball Cinnamon Whiskey, Mint Liqueur", available: true },
+      { category: "Shots", name: "Mind Eraser", price: "$1,000.00", description: "Vodka, Kahlua, Club Soda", available: true },
+      { category: "Shots", name: "B-52", price: "$1,000.00", description: "Kahlua, Baileys Irish Cream, Grand Marnier", available: true },
+      { category: "Shots", name: "Kamikaze", price: "$1,000.00", description: "Vodka, Triple Sec, Lime Juice", available: true },
+      { category: "Shots", name: "Blowjob", price: "$1,000.00", description: "Kahlua, Baileys, Whipped Cream", available: true },
+      { category: "Shots", name: "Lemon Drop", price: "$1,000.00", description: "Vodka, Lemon Juice, Sugar", available: true },
+      { category: "Shots", name: "Liquid Marijuana", price: "$1,000.00", description: "Malibu, Captain Morgan, Blue Curacao, Midori", available: true },
+
+      // 6. Beer & Stout
+      { category: "Beer & Stout", name: "Red Stripe Beer", price: "$600.00", description: "", available: true },
+      { category: "Beer & Stout", name: "Heineken", price: "$600.00", description: "", available: true },
+      { category: "Beer & Stout", name: "Corona", price: "$600.00", description: "", available: true },
+      { category: "Beer & Stout", name: "Guinness", price: "$600.00", description: "", available: true },
+      { category: "Beer & Stout", name: "Dragon Stout", price: "$600.00", description: "", available: true },
+      { category: "Beer & Stout", name: "Dragon Spit Fire", price: "$600.00", description: "", available: true },
+      { category: "Beer & Stout", name: "Smirnoff Ice", price: "$600.00", description: "", available: true },
+      { category: "Beer & Stout", name: "Stella Artois", price: "$700.00", description: "", available: true },
+      { category: "Beer & Stout", name: "Red Stripe Flavoured Beer", price: "$600.00", description: "", available: true },
+      { category: "Beer & Stout", name: "Banrock 225ml", price: "$1,100.00", description: "", available: true },
+
+      // 7. Appetizers
+      { category: "Appetizers", name: "Soup of the Day (Small / Medium / Large)", price: "$300.00 | $600.00 | $800.00", description: "Fresh, house-made and simmered to perfection daily", available: true },
+      { category: "Appetizers", name: "Rizz23 Signature Wings (6 Pcs / 12 Pcs)", price: "$1,700.00 | $3,400.00", description: "Crispy, BBQ, Spicy BBQ. Tossed in your choice of bold signature glaze", available: true },
+      { category: "Appetizers", name: "Handcrafted Street Taco (Shrimp / Chicken / Beef)", price: "$2,500.00 | $2,300.00 | $2,200.00", description: "Loaded with fresh slaw, house salsa & lime crema", available: true },
+      { category: "Appetizers", name: "Rizz23 Signature Wrap (Chicken / Shrimp)", price: "$2,300.00 | $2,500.00", description: "Grilled and wrapped with crisp greens & signature sauce", available: true },
+      { category: "Appetizers", name: "Grilled Quesadilla (Chicken / Shrimp)", price: "$2,300.00 | $2,700.00", description: "Golden-pressed tortilla with melted cheese & sweet peppers", available: true },
+      { category: "Appetizers", name: "Golden Fish Bites", price: "$1,800.00", description: "Lightly battered sliced fish with zesty dipping sauce", available: true },
+      { category: "Appetizers", name: "Chef's Garden Chicken Salad", price: "$2,500.00", description: "Herb-marinated chicken over mixed vegetables & salad dressing", available: true },
+
+      // 8. Rizz23 Sandwiches, Burgers, Pasta & Extras
+      { category: "Rizz23 Sandwiches, Burgers, Pasta & Extras", name: "Rizz23 Grilled Chicken Sandwich", price: "$2,300.00", description: "Grilled chicken breast with fresh lettuce, tomato, and signature sauce", subtitle: "COMBOS", available: true },
+      { category: "Rizz23 Sandwiches, Burgers, Pasta & Extras", name: "Rizz23 Crispy Tenders Sandwich", price: "$2,200.00", description: "Crispy chicken tenders with tangy slaw and savory sauce", available: true },
+      { category: "Rizz23 Sandwiches, Burgers, Pasta & Extras", name: "Rizz23 Smash Burger", price: "$2,400.00", description: "Juicy smashed beef patty with melted cheese and classic burger fixings", available: true },
+      { category: "Rizz23 Sandwiches, Burgers, Pasta & Extras", name: "Crispy Fish Sandwich", price: "$2,000.00", description: "Crispy fish fillet with fresh slaw and soft bun", available: true },
+      { category: "Rizz23 Sandwiches, Burgers, Pasta & Extras", name: "Creamy Chicken Alfredo", price: "$3,300.00", description: "Tender chicken in rich parmesan cream sauce", subtitle: "RIZZ23 PASTAS", available: true },
+      { category: "Rizz23 Sandwiches, Burgers, Pasta & Extras", name: "Signature Shrimp Alfredo", price: "$3,700.00", description: "Sautéed shrimp in a creamy garlic parmesan Alfredo", available: true },
+      { category: "Rizz23 Sandwiches, Burgers, Pasta & Extras", name: "Surf & Turf Alfredo", price: "$4,300.00", description: "Chicken and shrimp tossed in creamy Alfredo sauce", available: true },
+      { category: "Rizz23 Sandwiches, Burgers, Pasta & Extras", name: "Golden Chicken Strips", price: "$1,700.00", description: "Golden-fried chicken strips, crisp and juicy", subtitle: "RIZZ23 EXTRAS", available: true },
+      { category: "Rizz23 Sandwiches, Burgers, Pasta & Extras", name: "Crispy Chicken Nuggets", price: "$1,700.00", description: "Bite-sized seasoned chicken nuggets, perfectly crispy", available: true },
+      { category: "Rizz23 Sandwiches, Burgers, Pasta & Extras", name: "Fully Loaded Fries (Chicken or Bacon / Chicken & Bacon)", price: "$1,500.00 | $1,800.00", description: "Crispy fries loaded with melted cheese, bacon, and creamy sauce", available: true },
+
+      // 9. Sides & Add-Ons
+      { category: "Sides & Add-Ons", name: "Smokey Bacon", price: "$500.00", description: "Crispy smoked bacon slices", available: true },
+      { category: "Sides & Add-Ons", name: "Golden Festival", price: "$500.00", description: "Traditional sweet Jamaican fried dough", available: true },
+      { category: "Sides & Add-Ons", name: "Seasonal Vegetables", price: "$500.00", description: "Fresh sauteed garden vegetables", available: true },
+      { category: "Sides & Add-Ons", name: "Hand-Cut Fries", price: "$500.00", description: "Golden fried seasoned potato fries", available: true },
+      { category: "Sides & Add-Ons", name: "Creamy Mashed Potatoes", price: "$800.00", description: "Butter whipped potatoes", available: true },
+      { category: "Sides & Add-Ons", name: "Saltfish Stamp & Go", price: "$700.00", description: "Crispy saltfish fritters", available: true },
+      { category: "Sides & Add-Ons", name: "Bammy", price: "$500.00", description: "Cassava flatbread slices", available: true },
+      { category: "Sides & Add-Ons", name: "Buttered Sweet Corn", price: "$500.00", description: "Warm seasoned sweet corn", available: true },
+      { category: "Sides & Add-Ons", name: "Roasted Breadfruit", price: "$500.00", description: "Fire-roasted breadfruit slices", available: true },
+      { category: "Sides & Add-Ons", name: "Crispy Pressed Plantain", price: "$500.00", description: "Fried green plantain slices", available: true },
+      { category: "Sides & Add-Ons", name: "Warm Buttered Roti", price: "$500.00", description: "Soft Caribbean roti bread", available: true },
+      { category: "Sides & Add-Ons", name: "Ripe Plantain", price: "$500.00", description: "Sweet fried plantain slices", available: true },
+      { category: "Sides & Add-Ons", name: "Steamed White Rice", price: "$500.00", description: "Fluffy white rice", available: true },
+      { category: "Sides & Add-Ons", name: "Coconut Rice & Peas", price: "$500.00", description: "Traditional Jamaican coconut rice & kidney beans", available: true },
+      { category: "Sides & Add-Ons", name: "Red Velvet Layer Cake", price: "$800.00", description: "Decadent cream cheese layered cake", available: true },
+      { category: "Sides & Add-Ons", name: "Rich Chocolate Torte", price: "$800.00", description: "Dense chocolate gourmet slice", available: true },
+      { category: "Sides & Add-Ons", name: "New York Cheesecake", price: "$1,000.00", description: "Classic rich creamy cheesecake", available: true },
+      { category: "Sides & Add-Ons", name: "Black Forest Gateau", price: "$800.00", description: "Chocolate cherry liqueur cake slice", available: true },
+      { category: "Sides & Add-Ons", name: "Rizz23 Signature Scoops", price: "$500.00", description: "Ice cream layered with chocolate drips and topped with fresh whipped cream and cherry", available: true }
+    ];
+
+    let paginatedSpreads = [];
 
     function initApp() {
       db.collection("menuItems").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
@@ -1337,24 +1490,39 @@
           currentMenuItems.push({ id: doc.id, ...doc.data() });
         });
 
-        if (window.location.hash.toLowerCase() === "#dinner" || window.location.hash.toLowerCase() === "#dinner-menu") {
-          filterMenu('Dinner');
-          openMenuBook();
-        } else {
-          renderMenu(currentMenuItems);
+        if (currentMenuItems.length === 0) {
+          currentMenuItems = initialSeedData.map((item, idx) => ({ id: `seed_${idx}`, ...item }));
         }
+
+        buildBookSpreads();
+        updateBookSpread();
       }, (error) => {
-        console.error("Firestore Listen Error: ", error);
+        console.warn("Firestore listener warning, loading menu:", error);
+        currentMenuItems = initialSeedData.map((item, idx) => ({ id: `seed_${idx}`, ...item }));
+        buildBookSpreads();
+        updateBookSpread();
       });
       updateCartUI();
     }
 
-    window.addEventListener("hashchange", () => {
-      if (window.location.hash.toLowerCase() === "#dinner" || window.location.hash.toLowerCase() === "#dinner-menu") {
-        filterMenu('Dinner');
-        openMenuBook();
-      }
-    });
+    function buildBookSpreads() {
+      paginatedSpreads = [];
+
+      // Structure all items organized strictly by requested category order
+      categoryOrder.forEach(catName => {
+        const catItems = currentMenuItems.filter(i => i.category === catName);
+        if (catItems.length > 0) {
+          // Chunk category items into pages
+          const itemsPerPage = 5; 
+          for (let i = 0; i < catItems.length; i += itemsPerPage) {
+            paginatedSpreads.push({
+              category: catName,
+              items: catItems.slice(i, i + itemsPerPage)
+            });
+          }
+        }
+      });
+    }
 
     function openMenuBook() {
       const container = document.getElementById("book-container");
@@ -1364,89 +1532,97 @@
       document.getElementById("menu")?.scrollIntoView({ behavior: 'smooth' });
     }
 
-    function renderMenu(items) {
-      activeFilteredItems = items;
-      currentBookPageIndex = 0;
-      updateBookSpread();
-    }
-
     function updateBookSpread() {
-      const leftList = document.getElementById("menu-left-list");
-      const rightList = document.getElementById("menu-right-list");
-      leftList.innerHTML = "";
-      rightList.innerHTML = "";
+      const leftContent = document.getElementById("left-page-content");
+      const rightContent = document.getElementById("right-page-content");
+      leftContent.innerHTML = "";
+      rightContent.innerHTML = "";
 
-      if (activeFilteredItems.length === 0) {
-        leftList.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding: 2rem 0;">No items available in this category.</p>`;
+      if (paginatedSpreads.length === 0) {
+        leftContent.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding: 2rem 0;">No menu items found.</p>`;
         document.getElementById("book-page-num").innerText = "Page 1";
         return;
       }
 
-      const startIndex = currentBookPageIndex * itemsPerPageSpread;
-      const visibleItems = activeFilteredItems.slice(startIndex, startIndex + itemsPerPageSpread);
+      const leftIndex = currentBookPageIndex * 2;
+      const rightIndex = leftIndex + 1;
 
-      const leftItems = visibleItems.slice(0, 2);
-      const rightItems = visibleItems.slice(2, 4);
+      if (paginatedSpreads[leftIndex]) {
+        renderPageData(leftContent, paginatedSpreads[leftIndex]);
+      }
+      if (paginatedSpreads[rightIndex]) {
+        renderPageData(rightContent, paginatedSpreads[rightIndex]);
+      }
 
-      leftItems.forEach(item => leftList.appendChild(createBookItemElement(item)));
-      rightItems.forEach(item => rightList.appendChild(createBookItemElement(item)));
-
-      const totalPages = Math.ceil(activeFilteredItems.length / itemsPerPageSpread) || 1;
-      const leftPageNum = (currentBookPageIndex * 2) + 1;
-      const rightPageNum = (currentBookPageIndex * 2) + 2;
-      document.getElementById("book-page-num").innerText = `Pages ${leftPageNum}-${rightPageNum} of ${totalPages * 2}`;
+      const totalSpreads = Math.ceil(paginatedSpreads.length / 2);
+      const leftPageNum = leftIndex + 1;
+      const rightPageNum = rightIndex + 1;
+      document.getElementById("book-page-num").innerText = `Pages ${leftPageNum}-${rightPageNum} of ${paginatedSpreads.length}`;
     }
 
-    function createBookItemElement(item) {
-      const card = document.createElement("div");
-      card.className = "book-item-card";
-      card.innerHTML = `
-        <img src="${item.image}" alt="${item.name}" class="book-item-img" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80'" />
-        <div class="book-item-info">
-          <div class="book-item-header">
-            <h3 class="book-item-title">${item.name}</h3>
-            <span class="book-item-price">${item.price}</span>
-          </div>
-          <p class="book-item-desc">${item.description}</p>
-          <div class="card-actions">
-            <button class="btn-order-item" onclick="addToCart('${item.id}', '${item.name.replace(/'/g, "\\'")}', '${item.price}')">
-              ADD TO CART
+    function renderPageData(containerElement, pageData) {
+      const sectionBox = document.createElement("div");
+      sectionBox.className = "book-section-container";
+
+      const title = document.createElement("h3");
+      title.className = "book-section-title";
+      title.innerText = pageData.category;
+      sectionBox.appendChild(title);
+
+      const listContainer = document.createElement("div");
+      listContainer.className = "book-item-list";
+
+      pageData.items.forEach(item => {
+        if (item.subtitle) {
+          const subTitleElem = document.createElement("div");
+          subTitleElem.className = "book-section-subtitle";
+          subTitleElem.innerText = item.subtitle;
+          listContainer.appendChild(subTitleElem);
+        }
+        listContainer.appendChild(createRestaurantMenuItem(item));
+      });
+
+      sectionBox.appendChild(listContainer);
+      containerElement.appendChild(sectionBox);
+    }
+
+    function createRestaurantMenuItem(item) {
+      const isAvailable = item.available !== false;
+      const container = document.createElement("div");
+      container.className = `restaurant-menu-item ${!isAvailable ? 'out-of-stock' : ''}`;
+      
+      container.innerHTML = `
+        <div class="restaurant-menu-header">
+          <span class="restaurant-menu-title">${item.name}</span>
+          <span class="restaurant-dots"></span>
+          <span class="restaurant-menu-price">${item.price}</span>
+        </div>
+        ${item.description ? `<p class="restaurant-menu-desc">${item.description}</p>` : ''}
+        <div class="restaurant-item-actions">
+          ${isAvailable ? `
+            <button class="btn-add-cart-menu" onclick="addToCart('${item.id}', '${item.name.replace(/'/g, "\\'")}', '${item.price}')">
+              + Add To Cart
             </button>
-            ${window.isAdminLoggedIn ? `
-              <div class="admin-actions-group">
-                <button class="btn-admin-action" onclick="changePrice('${item.id}')">Edit Price</button>
-                <button class="btn-admin-action btn-admin-delete" onclick="deleteMenuItem('${item.id}')">Delete</button>
-              </div>
-            ` : ''}
-          </div>
+          ` : `
+            <span class="out-stock-badge">Sold Out Today</span>
+          `}
+          ${window.isAdminLoggedIn ? `
+            <div class="admin-actions-group">
+              <button class="btn-admin-action" onclick="toggleStock('${item.id}', ${isAvailable})">${isAvailable ? 'Mark Sold Out' : 'Mark Available'}</button>
+              <button class="btn-admin-action" onclick="changePrice('${item.id}')">Edit Price</button>
+              <button class="btn-admin-action btn-admin-delete" onclick="deleteMenuItem('${item.id}')">Delete</button>
+            </div>
+          ` : ''}
         </div>
       `;
-      return card;
+      return container;
     }
 
     function nextBookPage() {
-      const totalSpreads = Math.ceil(activeFilteredItems.length / itemsPerPageSpread);
+      const totalSpreads = Math.ceil(paginatedSpreads.length / 2);
       if (currentBookPageIndex < totalSpreads - 1) {
         currentBookPageIndex++;
         updateBookSpread();
-      } else {
-        const filterContainer = document.getElementById("filter-buttons");
-        if (filterContainer) {
-          const isMobileOrTablet = window.innerWidth <= 1024;
-          let elementTop = 0;
-          let el = filterContainer;
-          while (el) {
-            elementTop += el.offsetTop;
-            el = el.offsetParent;
-          }
-          const offset = isMobileOrTablet ? 90 : 20;
-          const targetPosition = Math.max(0, elementTop - offset);
-
-          window.scrollTo({
-            top: targetPosition,
-            behavior: 'smooth'
-          });
-        }
       }
     }
 
@@ -1562,25 +1738,6 @@
       window.location.href = `${baseUrl}?account_id=${WIPAY_ACCOUNT_ID}&total=${totalAmount.toFixed(2)}&currency=JMD&name=${encodeURIComponent(orderSummary)}&customer_name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&note=${encodeURIComponent(delivery)}&return_url=${returnUrl}`;
     }
 
-    function filterMenu(category) {
-      openMenuBook();
-      const buttons = document.querySelectorAll(".filter-btn");
-      buttons.forEach(btn => {
-        if (btn.innerText.trim().toLowerCase() === category.toLowerCase() || (category === 'All' && btn.innerText.includes('All'))) {
-          btn.classList.add("active");
-        } else {
-          btn.classList.remove("active");
-        }
-      });
-
-      if (category === "All") {
-        renderMenu(currentMenuItems);
-      } else {
-        const filtered = currentMenuItems.filter(item => item.category && item.category.toLowerCase().trim() === category.toLowerCase().trim());
-        renderMenu(filtered);
-      }
-    }
-
     async function openAdminModal() {
       if (!window.isAdminLoggedIn) {
         let email = prompt("Enter Client Admin Email:", "");
@@ -1592,10 +1749,11 @@
         try {
           await auth.signInWithEmailAndPassword(email.trim(), password.trim());
           window.isAdminLoggedIn = true;
-          alert("Admin Mode Activated via Firebase!");
-          renderMenu(currentMenuItems);
+          alert("Admin Mode Activated!");
+          buildBookSpreads();
+          updateBookSpread();
         } catch (error) {
-          alert("Firebase Login Failed: " + error.message);
+          alert("Admin Login Failed: " + error.message);
           return;
         }
       }
@@ -1615,44 +1773,6 @@
       }
     }
 
-    function convertFileToBase64(fileInput) {
-      const file = fileInput.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const img = new Image();
-        img.onload = function () {
-          const MAX_WIDTH = 800;
-          const MAX_HEIGHT = 800;
-          let width = img.width;
-          let height = img.height;
-
-          if (width > height) {
-            if (width > MAX_WIDTH) {
-              height *= MAX_WIDTH / width;
-              width = MAX_WIDTH;
-            }
-          } else {
-            if (height > MAX_HEIGHT) {
-              width *= MAX_HEIGHT / height;
-              height = MAX_HEIGHT;
-            }
-          }
-
-          const canvas = document.createElement("canvas");
-          canvas.width = width;
-          canvas.height = height;
-
-          const ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0, width, height);
-          uploadedBase64Image = canvas.toDataURL("image/jpeg", 0.7);
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-
     async function handleAddNewItem(e) {
       e.preventDefault();
 
@@ -1660,9 +1780,6 @@
       const category = document.getElementById("admin-item-category").value;
       const price = document.getElementById("admin-item-price").value;
       const desc = document.getElementById("admin-item-desc").value;
-      const urlImage = document.getElementById("admin-item-image-url").value;
-
-      const finalImage = urlImage || uploadedBase64Image || "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80";
       const formattedPrice = price.startsWith("$") ? price : `$${price}`;
 
       try {
@@ -1671,16 +1788,30 @@
           name: name,
           description: desc,
           price: formattedPrice,
-          image: finalImage,
+          available: true,
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        alert("Item added live!");
+        alert("Item added live to menu!");
         document.getElementById("admin-add-form").reset();
-        uploadedBase64Image = "";
         closeAdminModal();
       } catch (error) {
-        alert("Error adding item to Firestore: " + error.message);
+        alert("Error adding item: " + error.message);
+      }
+    }
+
+    async function toggleStock(id, currentStatus) {
+      try {
+        if (id.startsWith("seed_")) {
+          const item = currentMenuItems.find(i => i.id === id);
+          if (item) item.available = !currentStatus;
+        } else {
+          await db.collection("menuItems").doc(id).update({ available: !currentStatus });
+        }
+        buildBookSpreads();
+        updateBookSpread();
+      } catch (error) {
+        alert("Error updating availability status: " + error.message);
       }
     }
 
@@ -1691,7 +1822,13 @@
         if (newPrice) {
           const formattedPrice = newPrice.startsWith("$") ? newPrice : `$${newPrice}`;
           try {
-            await db.collection("menuItems").doc(id).update({ price: formattedPrice });
+            if (id.startsWith("seed_")) {
+              item.price = formattedPrice;
+            } else {
+              await db.collection("menuItems").doc(id).update({ price: formattedPrice });
+            }
+            buildBookSpreads();
+            updateBookSpread();
           } catch (error) {
             alert("Error updating price: " + error.message);
           }
@@ -1702,7 +1839,13 @@
     async function deleteMenuItem(id) {
       if (confirm("Are you sure you want to remove this item from your live menu?")) {
         try {
-          await db.collection("menuItems").doc(id).delete();
+          if (id.startsWith("seed_")) {
+            currentMenuItems = currentMenuItems.filter(i => i.id !== id);
+          } else {
+            await db.collection("menuItems").doc(id).delete();
+          }
+          buildBookSpreads();
+          updateBookSpread();
         } catch (error) {
           alert("Error deleting item: " + error.message);
         }
