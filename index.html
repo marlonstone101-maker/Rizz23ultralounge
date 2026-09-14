@@ -1627,7 +1627,7 @@
       if (currentBookPageIndex < totalSpreads - 1) {
         currentBookPageIndex++;
         updateBookSpread();
-        window.scrollTo({ top: 0, behavior: 'smooth'});
+        document.getElementById('menu-section-id').scrollIntoView({ behavior: 'smooth' });
       }
     }
 
@@ -1635,7 +1635,7 @@
       if (currentBookPageIndex > 0) {
         currentBookPageIndex--;
         updateBookSpread();
-        window.scrollTo({ top: 0, behavior: 'smooth'}); 
+        document.getElementById('menu-section-id').scrollIntoView({ behavior: 'smooth' });
       }
     }
 
