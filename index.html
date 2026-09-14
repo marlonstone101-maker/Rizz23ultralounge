@@ -1429,10 +1429,22 @@
         currentBookPageIndex++;
         updateBookSpread();
       } else {
-        // Automatically scroll back to the menu filter tabs when reaching the end
         const filterContainer = document.getElementById("filter-buttons");
         if (filterContainer) {
-          filterContainer.scrollIntoView({ behavior: 'smooth' });
+          const isMobileOrTablet = window.innerWidth <= 1024;
+          let elementTop = 0;
+          let el = filterContainer;
+          while (el) {
+            elementTop += el.offsetTop;
+            el = el.offsetParent;
+          }
+          const offset = isMobileOrTablet ? 90 : 20;
+          const targetPosition = Math.max(0, elementTop - offset);
+
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
         }
       }
     }
