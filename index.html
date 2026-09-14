@@ -1428,6 +1428,12 @@
       if (currentBookPageIndex < totalSpreads - 1) {
         currentBookPageIndex++;
         updateBookSpread();
+      } else {
+        // Automatically scroll back to the menu filter tabs when reaching the end
+        const filterContainer = document.getElementById("filter-buttons");
+        if (filterContainer) {
+          filterContainer.scrollIntoView({ behavior: 'smooth' });
+        }
       }
     }
 
