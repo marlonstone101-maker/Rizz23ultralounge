@@ -464,9 +464,9 @@
       display: block;
     }
 
-    /* Dynamic Menu Section */
+    /* Dynamic Menu Section - Interactive 3D Book Experience */
     .menu-container {
-      padding: 6rem 6%;
+      padding: 6rem 3%;
       max-width: 1300px;
       margin: 0 auto;
     }
@@ -475,7 +475,7 @@
       display: flex;
       justify-content: center;
       gap: 0.8rem;
-      margin-bottom: 3.5rem;
+      margin-bottom: 3rem;
       flex-wrap: wrap;
     }
 
@@ -500,96 +500,216 @@
       font-weight: 600;
     }
 
-    .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 2.5rem;
-      align-items: stretch;
-    }
-
-    .menu-card {
-      background: var(--card-bg-alt);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--border-gold);
-      border-radius: 14px;
-      overflow: hidden;
+    .menu-book-wrapper {
+      perspective: 2000px;
+      max-width: 1000px;
+      margin: 0 auto;
       display: flex;
       flex-direction: column;
-      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      align-items: center;
     }
 
-    .menu-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 25px rgba(212, 175, 55, 0.25);
-      border-color: var(--border-gold-bright);
-    }
-
-    .menu-card-image-wrap {
+    .book-container {
       width: 100%;
-      height: 180px;
+      min-height: 600px;
+      position: relative;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+
+    .book-container.open {
+      transform: rotateY(0deg);
+    }
+
+    .book-cover {
+      width: 50%;
+      height: 100%;
+      position: absolute;
+      right: 0;
+      top: 0;
+      background: linear-gradient(135deg, #121212 0%, #080808 100%);
+      border: 2px solid var(--gold-primary);
+      border-radius: 0 16px 16px 0;
+      box-shadow: 15px 15px 35px rgba(0,0,0,0.8), inset 0 0 15px rgba(212, 175, 55, 0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem;
+      cursor: pointer;
+      z-index: 10;
+      transform-origin: left center;
+      transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+    }
+
+    .book-container.open .book-cover {
+      transform: rotateY(-180deg);
+      pointer-events: none;
+    }
+
+    .book-cover-content {
+      border: 1px dashed var(--gold-primary);
+      padding: 3rem 2rem;
+      border-radius: 8px;
+      text-align: center;
+      width: 100%;
+    }
+
+    .book-cover-logo {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 1px solid var(--gold-primary);
+      margin-bottom: 1.5rem;
+    }
+
+    .book-pages-spread {
+      display: none;
+      width: 100%;
+      min-height: 620px;
+      background: #0d0d0d;
+      border: 1px solid var(--border-gold-bright);
+      border-radius: 12px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.9), inset 0 0 100px rgba(0,0,0,0.8);
       position: relative;
       overflow: hidden;
     }
 
-    .menu-card-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s ease;
+    .book-container.open .book-pages-spread {
+      display: flex;
     }
 
-    .menu-card:hover .menu-card-img {
-      transform: scale(1.05);
-    }
-
-    .menu-card-content {
-      padding: 1.5rem;
+    .book-page {
+      flex: 1;
+      padding: 2.5rem;
       display: flex;
       flex-direction: column;
-      flex-grow: 1;
+      position: relative;
+      overflow-y: auto;
+      max-height: 620px;
     }
 
-    .menu-card-top-info {
+    .book-page-left {
+      border-right: 1px solid rgba(212, 175, 55, 0.2);
+      background: linear-gradient(90deg, rgba(0,0,0,0.4) 0%, rgba(20,20,20,0.1) 100%);
+    }
+
+    .book-page-right {
+      background: linear-gradient(-90deg, rgba(0,0,0,0.4) 0%, rgba(20,20,20,0.1) 100%);
+    }
+
+    .book-spine-line {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, transparent, var(--gold-primary), transparent);
+      z-index: 5;
+    }
+
+    .book-item-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+
+    .book-item-card {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      background: rgba(20, 20, 20, 0.6);
+      border: 1px solid var(--border-gold);
+      padding: 1.2rem;
+      border-radius: 12px;
+      transition: border-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .book-item-card:hover {
+      border-color: var(--border-gold-bright);
+      transform: translateY(-2px);
+    }
+
+    .book-item-img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--gold-primary);
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .book-item-info {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .book-item-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.75rem;
+      align-items: baseline;
+      margin-bottom: 0.3rem;
     }
 
-    .item-category-badge {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--gold-light);
-      background: rgba(212, 175, 55, 0.15);
-      border: 1px solid var(--border-gold);
-      padding: 0.2rem 0.6rem;
-      border-radius: 12px;
+    .book-item-title {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #fff;
     }
 
-    .item-price {
+    .book-item-price {
       font-family: var(--font-heading);
       font-weight: 700;
-      font-size: 1.25rem;
+      font-size: 1.1rem;
       color: var(--gold-primary);
     }
 
-    .item-title {
-      font-family: var(--font-serif);
-      font-size: 1.4rem;
-      font-weight: 600;
-      color: #fff;
-      line-height: 1.25;
-      margin-bottom: 0.5rem;
+    .book-item-desc {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      line-height: 1.4;
+      margin-bottom: 0.8rem;
     }
 
-    .item-desc {
+    .book-pagination {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .book-container.open + .book-pagination {
+      display: flex;
+    }
+
+    .book-nav-btn {
+      background: transparent;
+      border: 1px solid var(--border-gold);
+      color: var(--gold-light);
+      padding: 0.5rem 1.2rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+    }
+
+    .book-nav-btn:hover {
+      background: var(--gold-gradient);
+      color: #000;
+      border-color: transparent;
+    }
+
+    .book-page-num {
+      font-family: var(--font-heading);
+      font-size: 0.85rem;
       color: var(--text-muted);
-      font-size: 0.88rem;
-      line-height: 1.5;
-      margin-bottom: 1.5rem;
-      word-break: break-word;
-      flex-grow: 1;
     }
 
     .card-actions {
@@ -597,8 +717,7 @@
       flex-direction: column;
       gap: 8px;
       margin-top: auto;
-      padding-top: 1rem;
-      border-top: 1px solid rgba(212, 175, 55, 0.15);
+      padding-top: 0.5rem;
     }
 
     .btn-order-item {
@@ -606,12 +725,12 @@
       background: transparent;
       border: 1px solid var(--gold-primary);
       color: var(--gold-primary);
-      padding: 0.75rem;
+      padding: 0.55rem;
       border-radius: 6px;
       font-weight: 600;
       cursor: pointer;
       text-transform: uppercase;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       letter-spacing: 1.5px;
       transition: all 0.3s ease;
       text-align: center;
@@ -882,12 +1001,19 @@
       nav { flex-wrap: wrap; justify-content: center; gap: 1rem; }
       .nav-actions { width: 100%; justify-content: center; }
       .hero-hero-logo { width: 260px; }
-      .menu-grid { grid-template-columns: 1fr; }
+      
+      .book-cover { width: 100%; border-radius: 16px; }
+      .book-pages-spread { flex-direction: column; max-height: none; }
+      .book-page { max-height: none; padding: 1.5rem; }
+      .book-page-left { border-right: none; border-bottom: 1px solid rgba(212, 175, 55, 0.2); }
+      .book-spine-line { display: none; }
     }
 
     @media (max-width: 600px) {
       .modal-card { padding: 1.5rem; }
       .cart-float-btn { bottom: 15px; right: 15px; padding: 0.75rem 1.1rem; font-size: 0.75rem; }
+      .book-item-card { flex-direction: column; text-align: center; }
+      .book-item-header { flex-direction: column; align-items: center; gap: 0.2rem; }
     }
   </style>
 </head>
@@ -906,12 +1032,12 @@
     </a>
     <nav>
       <a href="#dining">Dining</a>
-      <a href="#menu">Menu</a>
+      <a href="#menu" onclick="openMenuBook()">Menu</a>
       <a href="reservation.html">Book Reservation</a>
     </nav>
     <div class="nav-actions">
       <button class="btn-admin-toggle" onclick="openAdminModal()">Rizz23 Admin</button>
-      <a href="#menu" id="vip-header-btn" class="btn-gold">Order & Pay Online</a>
+      <a href="#menu" id="vip-header-btn" class="btn-gold" onclick="openMenuBook()">Order & Pay Online</a>
     </div>
   </header>
 
@@ -923,7 +1049,7 @@
     </div>
     <p>An exquisite culinary journey featuring prime lunch cuts, luxury dinners, and high-energy VIP lounge experiences.</p>
     <div class="hero-actions">
-      <a href="#menu" class="btn-gold">Explore & Pay Online</a>
+      <a href="#menu" class="btn-gold" onclick="openMenuBook()">Explore & Pay Online</a>
       <a href="reservation.html" class="btn-outline">Book Reservation</a>
     </div>
   </section>
@@ -962,7 +1088,7 @@
     </div>
   </section>
 
-  <!-- Dynamic Menu Section -->
+  <!-- Dynamic Menu Section (Book Layout Transformation) -->
   <section class="menu-container" id="menu">
     <h2 class="section-title gold-text">Curated Culinary Menu</h2>
     <p class="section-subtitle">Lunch: 11 AM - 5 PM | Dinner: 5 PM - 12 AM</p>
@@ -975,8 +1101,38 @@
       <button class="filter-btn" onclick="filterMenu('Drinks & VIP')">Drinks, shots & Cocktail</button>
     </div>
 
-    <!-- Menu Card Display Grid -->
-    <div class="menu-grid" id="menu-grid"></div>
+    <!-- 3D Book Interactive Wrapper -->
+    <div class="menu-book-wrapper">
+      <div class="book-container" id="book-container">
+        <!-- Closed Book Front Cover -->
+        <div class="book-cover" onclick="openMenuBook()">
+          <div class="book-cover-content">
+            <img src="logo.png" class="book-cover-logo" alt="Rizz23" />
+            <h3 class="gold-text" style="font-family: var(--font-heading); font-size: 1.8rem; letter-spacing: 3px; margin-bottom: 0.5rem;">RIZZ23</h3>
+            <p style="font-family: var(--font-serif); font-style: italic; color: var(--gold-light); letter-spacing: 2px;">CULINARY SELECTIONS</p>
+            <p style="margin-top: 2rem; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px;">❖ Click To Open Menu ❖</p>
+          </div>
+        </div>
+
+        <!-- Open Book Page Spread -->
+        <div class="book-pages-spread">
+          <div class="book-spine-line"></div>
+          <div class="book-page book-page-left" id="book-page-left">
+            <div class="book-item-list" id="menu-left-list"></div>
+          </div>
+          <div class="book-page book-page-right" id="book-page-right">
+            <div class="book-item-list" id="menu-right-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Book Page Navigation -->
+      <div class="book-pagination" id="book-pagination">
+        <button class="book-nav-btn" onclick="prevBookPage()">◄ Previous Pages</button>
+        <span class="book-page-num" id="book-page-num">Pages 1-2</span>
+        <button class="book-nav-btn" onclick="nextBookPage()">Next Pages ►</button>
+      </div>
+    </div>
   </section>
 
   <!-- Event Booking Showcase Section -->
@@ -1168,7 +1324,10 @@
     window.isAdminLoggedIn = false;
     let uploadedBase64Image = "";
     let currentMenuItems = [];
+    let activeFilteredItems = [];
     let cart = [];
+    let currentBookPageIndex = 0;
+    const itemsPerPageSpread = 4; // 2 items on left page, 2 items on right page
 
     function initApp() {
       db.collection("menuItems").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
@@ -1179,7 +1338,7 @@
 
         if (window.location.hash.toLowerCase() === "#dinner" || window.location.hash.toLowerCase() === "#dinner-menu") {
           filterMenu('Dinner');
-          document.getElementById("menu")?.scrollIntoView({ behavior: 'smooth' });
+          openMenuBook();
         } else {
           renderMenu(currentMenuItems);
         }
@@ -1192,48 +1351,91 @@
     window.addEventListener("hashchange", () => {
       if (window.location.hash.toLowerCase() === "#dinner" || window.location.hash.toLowerCase() === "#dinner-menu") {
         filterMenu('Dinner');
-        document.getElementById("menu")?.scrollIntoView({ behavior: 'smooth' });
+        openMenuBook();
       }
     });
 
-    function renderMenu(items) {
-      const grid = document.getElementById("menu-grid");
-      grid.innerHTML = "";
+    function openMenuBook() {
+      const container = document.getElementById("book-container");
+      if (container) {
+        container.classList.add("open");
+      }
+      document.getElementById("menu")?.scrollIntoView({ behavior: 'smooth' });
+    }
 
-      if (items.length === 0) {
-        grid.innerHTML = `<p style="text-align:center; grid-column:1/-1; color:var(--text-muted);">No items available in this category.</p>`;
+    function renderMenu(items) {
+      activeFilteredItems = items;
+      currentBookPageIndex = 0;
+      updateBookSpread();
+    }
+
+    function updateBookSpread() {
+      const leftList = document.getElementById("menu-left-list");
+      const rightList = document.getElementById("menu-right-list");
+      leftList.innerHTML = "";
+      rightList.innerHTML = "";
+
+      if (activeFilteredItems.length === 0) {
+        leftList.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding: 2rem 0;">No items available in this category.</p>`;
+        document.getElementById("book-page-num").innerText = "Page 1";
         return;
       }
 
-      items.forEach(item => {
-        const card = document.createElement("div");
-        card.className = "menu-card";
-        card.innerHTML = `
-          <div class="menu-card-image-wrap">
-            <img src="${item.image}" alt="${item.name}" class="menu-card-img" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80'" />
+      const startIndex = currentBookPageIndex * itemsPerPageSpread;
+      const visibleItems = activeFilteredItems.slice(startIndex, startIndex + itemsPerPageSpread);
+
+      const leftItems = visibleItems.slice(0, 2);
+      const rightItems = visibleItems.slice(2, 4);
+
+      leftItems.forEach(item => leftList.appendChild(createBookItemElement(item)));
+      rightItems.forEach(item => rightList.appendChild(createBookItemElement(item)));
+
+      const totalPages = Math.ceil(activeFilteredItems.length / itemsPerPageSpread) || 1;
+      const leftPageNum = (currentBookPageIndex * 2) + 1;
+      const rightPageNum = (currentBookPageIndex * 2) + 2;
+      document.getElementById("book-page-num").innerText = `Pages ${leftPageNum}-${rightPageNum} of ${totalPages * 2}`;
+    }
+
+    function createBookItemElement(item) {
+      const card = document.createElement("div");
+      card.className = "book-item-card";
+      card.innerHTML = `
+        <img src="${item.image}" alt="${item.name}" class="book-item-img" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80'" />
+        <div class="book-item-info">
+          <div class="book-item-header">
+            <h3 class="book-item-title">${item.name}</h3>
+            <span class="book-item-price">${item.price}</span>
           </div>
-          <div class="menu-card-content">
-            <div class="menu-card-top-info">
-              <span class="item-category-badge">${item.category || 'Menu Item'}</span>
-              <span class="item-price">${item.price}</span>
-            </div>
-            <h3 class="item-title">${item.name}</h3>
-            <p class="item-desc">${item.description}</p>
-            <div class="card-actions">
-              <button class="btn-order-item" onclick="addToCart('${item.id}', '${item.name.replace(/'/g, "\\'")}', '${item.price}')">
-                ADD TO CART
-              </button>
-              ${window.isAdminLoggedIn ? `
-                <div class="admin-actions-group">
-                  <button class="btn-admin-action" onclick="changePrice('${item.id}')">Edit Price</button>
-                  <button class="btn-admin-action btn-admin-delete" onclick="deleteMenuItem('${item.id}')">Delete</button>
-                </div>
-              ` : ''}
-            </div>
+          <p class="book-item-desc">${item.description}</p>
+          <div class="card-actions">
+            <button class="btn-order-item" onclick="addToCart('${item.id}', '${item.name.replace(/'/g, "\\'")}', '${item.price}')">
+              ADD TO CART
+            </button>
+            ${window.isAdminLoggedIn ? `
+              <div class="admin-actions-group">
+                <button class="btn-admin-action" onclick="changePrice('${item.id}')">Edit Price</button>
+                <button class="btn-admin-action btn-admin-delete" onclick="deleteMenuItem('${item.id}')">Delete</button>
+              </div>
+            ` : ''}
           </div>
-        `;
-        grid.appendChild(card);
-      });
+        </div>
+      `;
+      return card;
+    }
+
+    function nextBookPage() {
+      const totalSpreads = Math.ceil(activeFilteredItems.length / itemsPerPageSpread);
+      if (currentBookPageIndex < totalSpreads - 1) {
+        currentBookPageIndex++;
+        updateBookSpread();
+      }
+    }
+
+    function prevBookPage() {
+      if (currentBookPageIndex > 0) {
+        currentBookPageIndex--;
+        updateBookSpread();
+      }
     }
 
     function addToCart(id, name, price) {
@@ -1342,6 +1544,7 @@
     }
 
     function filterMenu(category) {
+      openMenuBook();
       const buttons = document.querySelectorAll(".filter-btn");
       buttons.forEach(btn => {
         if (btn.innerText.trim().toLowerCase() === category.toLowerCase() || (category === 'All' && btn.innerText.includes('All'))) {
