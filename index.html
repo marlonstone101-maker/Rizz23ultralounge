@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --bg-dark: #050505;
@@ -203,36 +203,43 @@
       border-color: var(--gold-primary);
     }
 
-    /* Floating Cart Button & Modal Styles */
-    .cart-float-btn {
+    /* Floating Order Button & Modal Styles */
+    .order-float-btn {
       position: fixed;
       bottom: 25px;
       right: 25px;
       z-index: 1500;
-      background: var(--gold-gradient);
-      color: #000;
-      border: none;
+      background: #000;
+      color: var(--gold-primary);
+      border: 1px solid var(--gold-primary);
       padding: 0.9rem 1.4rem;
       border-radius: 30px;
       font-weight: 700;
       font-size: 0.85rem;
       letter-spacing: 1.5px;
       text-transform: uppercase;
-      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8), 0 0 15px rgba(212, 175, 55, 0.4);
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 10px;
-      transition: transform 0.2s ease;
+      transition: all 0.3s ease;
     }
 
-    .cart-float-btn:active {
+    .order-float-btn:hover {
+      background: var(--gold-gradient);
+      color: #000;
+      border-color: transparent;
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.6);
+    }
+
+    .order-float-btn:active {
       transform: scale(0.95);
     }
 
     .cart-badge {
-      background: #000;
-      color: var(--gold-light);
+      background: var(--gold-primary);
+      color: #000;
       border-radius: 50%;
       width: 24px;
       height: 24px;
@@ -241,6 +248,12 @@
       justify-content: center;
       font-size: 0.75rem;
       font-weight: 800;
+      transition: all 0.3s ease;
+    }
+
+    .order-float-btn:hover .cart-badge {
+      background: #000;
+      color: var(--gold-light);
     }
 
     .quantity-control {
@@ -263,14 +276,14 @@
       justify-content: center;
     }
 
-    .cart-items-list {
+    .order-items-list {
       max-height: 240px;
       overflow-y: auto;
       margin-bottom: 1rem;
       padding-right: 5px;
     }
 
-    .cart-item-row {
+    .order-item-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -629,10 +642,10 @@
       border-top: 1px dashed rgba(212, 175, 55, 0.2);
     }
 
-    .btn-add-cart-menu {
-      background: transparent;
+    .btn-add-order-menu {
+      background: #000;
       border: 1px solid var(--gold-primary);
-      color: var(--gold-light);
+      color: var(--gold-primary);
       padding: 0.45rem 1.1rem;
       border-radius: 20px;
       font-size: 0.75rem;
@@ -640,9 +653,10 @@
       text-transform: uppercase;
       cursor: pointer;
       transition: all 0.3s ease;
+      font-weight: 600;
     }
 
-    .btn-add-cart-menu:hover {
+    .btn-add-order-menu:hover {
       background: var(--gold-gradient);
       color: #000;
       border-color: transparent;
@@ -1017,7 +1031,7 @@
         padding: 1.2rem;
       }
 
-      .cart-float-btn {
+      .order-float-btn {
         bottom: 15px;
         right: 15px;
         padding: 0.75rem 1rem;
@@ -1033,9 +1047,9 @@
 </head>
 <body onload="initApp()">
 
-  <!-- Floating Cart Button -->
-  <button class="cart-float-btn" onclick="openPaymentModal()">
-    🛒 View Cart <span class="cart-badge" id="cart-count">0</span>
+  <!-- Floating Order Button -->
+  <button class="order-float-btn" onclick="openPaymentModal()">
+    🛒 View order <span class="cart-badge" id="order-count">0</span>
   </button>
 
   <!-- Navigation Bar -->
@@ -1119,7 +1133,7 @@
     <div class="events-grid">
       <div class="events-info">
         <span class="hero-tag">Host Your Special Moments</span>
-        <h3 class="gold-text">Birthday Packages & VIP Tables</h3>
+        <h3 class="gold-text">Birthday Wedding Reception Baby Shower & Venue Rental Packages</h3>
         <p>Whether you are hosting an intimate birthday dinner, a corporate gala, or an exclusive night out in our VIP lounge, Rizz23 provides tailored event packages to fit your exact vision.</p>
         
         <div class="event-card-types">
@@ -1184,7 +1198,7 @@
     </div>
   </section>
 
-  <!-- Cart / Payment Modal Overlay -->
+  <!-- Order / Payment Modal Overlay -->
   <div class="modal-overlay" id="payment-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closePaymentModal()">&times;</button>
@@ -1192,8 +1206,8 @@
       
       <form id="card-checkout-form" onsubmit="processCardPayment(event)">
         <div style="margin-bottom: 1.5rem; background: #000; padding: 1rem; border-radius: 6px; border: 1px solid var(--border-gold);">
-          <div id="cart-items-container" class="cart-items-list">
-            <!-- Dynamically populates items in cart -->
+          <div id="order-items-container" class="order-items-list">
+            <!-- Dynamically populates items in order -->
           </div>
           <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--border-gold); padding-top: 0.8rem; margin-top: 0.5rem;">
             <span style="font-weight: 600; color: #fff;">Total:</span>
@@ -1312,7 +1326,7 @@
 
     window.isAdminLoggedIn = false;
     let currentMenuItems = [];
-    let cart = [];
+    let order = [];
 
     // Categories in explicit requested order
     const categoryOrder = [
@@ -1449,7 +1463,7 @@
         currentMenuItems = initialSeedData.map((item, idx) => ({ id: `seed_${idx}`, ...item }));
         renderLuxuryMenu();
       });
-      updateCartUI();
+      updateorderUI();
     }
 
     function renderLuxuryMenu() {
@@ -1491,7 +1505,7 @@
     function createLuxuryMenuItemCard(item) {
       const isAvailable = item.available !== false;
       const card = document.createElement("div");
-      card.className = `luxury-menu-card ${!isAvailable ? 'out-of-stock' : ''}`;
+      card.className = `luxury-menu-card ${!isAvailable ? 'Not Available' : ''}`;
 
       card.innerHTML = `
         <div>
@@ -1504,15 +1518,15 @@
         </div>
         <div class="card-footer-actions">
           ${isAvailable ? `
-            <button class="btn-add-cart-menu" onclick="addToCart('${item.id}', '${item.name.replace(/'/g, "\\'")}', '${item.price}')">
-              + Add To Cart
+            <button class="btn-add-order-menu" onclick="addToorder('${item.id}', '${item.name.replace(/'/g, "\\'")}', '${item.price}')">
+              + Add To Order
             </button>
           ` : `
-            <span class="out-stock-badge">Sold Out Today</span>
+            <span class="out-stock-badge">Not Available</span>
           `}
           ${window.isAdminLoggedIn ? `
             <div class="admin-actions-group">
-              <button class="btn-admin-action" onclick="toggleStock('${item.id}', ${isAvailable})">${isAvailable ? 'Mark Sold Out' : 'Mark Available'}</button>
+              <button class="btn-admin-action" onclick="toggleStock('${item.id}', ${isAvailable})">${isAvailable ? 'Mark Unavailable' : 'Mark Available'}</button>
               <button class="btn-admin-action" onclick="changePrice('${item.id}')">Edit Price</button>
               <button class="btn-admin-action btn-admin-delete" onclick="deleteMenuItem('${item.id}')">Delete</button>
             </div>
@@ -1522,59 +1536,59 @@
       return card;
     }
 
-    function addToCart(id, name, price) {
+    function addToorder(id, name, price) {
       const numPrice = parseFloat(price.replace(/[^0-9.]/g, '')) || 0;
-      const existing = cart.find(item => item.id === id);
+      const existing = order.find(item => item.id === id);
       if (existing) {
         existing.qty += 1;
       } else {
-        cart.push({ id, name, price: numPrice, qty: 1 });
+        order.push({ id, name, price: numPrice, qty: 1 });
       }
-      updateCartUI();
+      updateorderUI();
     }
 
-    function updateCartQuantity(id, change) {
-      const index = cart.findIndex(item => item.id === id);
+    function updateorderQuantity(id, change) {
+      const index = order.findIndex(item => item.id === id);
       if (index !== -1) {
-        cart[index].qty += change;
-        if (cart[index].qty <= 0) {
-          cart.splice(index, 1);
+        order[index].qty += change;
+        if (order[index].qty <= 0) {
+          order.splice(index, 1);
         }
       }
-      updateCartUI();
-      renderCartItems();
+      updateorderUI();
+      renderorderItems();
     }
 
-    function updateCartUI() {
-      const count = cart.reduce((sum, item) => sum + item.qty, 0);
-      document.getElementById("cart-count").innerText = count;
+    function updateorderUI() {
+      const count = order.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById("order-count").innerText = count;
     }
 
-    function renderCartItems() {
-      const container = document.getElementById("cart-items-container");
+    function renderorderItems() {
+      const container = document.getElementById("order-items-container");
       container.innerHTML = "";
       
-      if (cart.length === 0) {
-        container.innerHTML = `<p style="text-align:center; color: var(--text-muted); font-size: 0.9rem;">Your cart is empty.</p>`;
+      if (order.length === 0) {
+        container.innerHTML = `<p style="text-align:center; color: var(--text-muted); font-size: 0.9rem;">Your order is empty.</p>`;
         document.getElementById("checkout-summary-price").innerText = "$0.00";
         return;
       }
 
       let total = 0;
-      cart.forEach(item => {
+      order.forEach(item => {
         const itemTotal = item.price * item.qty;
         total += itemTotal;
         const row = document.createElement("div");
-        row.className = "cart-item-row";
+        row.className = "order-item-row";
         row.innerHTML = `
           <div>
             <p style="font-weight: 600; color: #fff; font-size: 0.9rem;">${item.name}</p>
             <p style="font-size: 0.8rem; color: var(--gold-primary);">$${item.price.toFixed(2)} each</p>
           </div>
           <div class="quantity-control">
-            <button type="button" class="btn-qty" onclick="updateCartQuantity('${item.id}', -1)">-</button>
+            <button type="button" class="btn-qty" onclick="updateorderQuantity('${item.id}', -1)">-</button>
             <span style="font-size: 0.85rem; color: #fff; min-width: 18px; text-align: center;">${item.qty}</span>
-            <button type="button" class="btn-qty" onclick="updateCartQuantity('${item.id}', 1)">+</button>
+            <button type="button" class="btn-qty" onclick="updateorderQuantity('${item.id}', 1)">+</button>
           </div>
         `;
         container.appendChild(row);
@@ -1584,7 +1598,7 @@
     }
 
     function openPaymentModal() {
-      renderCartItems();
+      renderorderItems();
       const modal = document.getElementById("payment-modal");
       modal.classList.add("active");
       modal.style.display = "flex";
@@ -1599,8 +1613,8 @@
     function processCardPayment(e) {
       e.preventDefault();
 
-      if (cart.length === 0) {
-        alert("Your cart is empty. Please add items before checking out.");
+      if (order.length === 0) {
+        alert("Your order is empty. Please add items before checking out.");
         return;
       }
 
@@ -1608,8 +1622,8 @@
       const email = document.getElementById("card-email").value;
       const delivery = document.getElementById("delivery-info").value;
 
-      const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-      const orderSummary = cart.map(item => `${item.qty}x ${item.name}`).join(", ");
+      const totalAmount = order.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      const orderSummary = order.map(item => `${item.qty}x ${item.name}`).join(", ");
 
       if (totalAmount <= 0) {
         alert("Invalid transaction amount.");
