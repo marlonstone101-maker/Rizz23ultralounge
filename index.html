@@ -1270,6 +1270,8 @@
             <label>Category</label>
             <select id="admin-item-category" class="form-control" required>
               <option value="Lunch Selection">Lunch Selection</option>
+              <option value="Side Selection">Side Selection</option>
+              <option value="Filler Selection">Filler Selection</option>
               <option value="Soft Drinks">Soft Drinks Selection</option>
               <option value="Dinner Selection">Dinner Selection</option>
               <option value="Shaken Cocktails">Shaken Cocktails</option>
@@ -1285,7 +1287,7 @@
           </div>
           <div class="form-group" style="flex: 1;">
             <label>Price ($)</label>
-            <input type="text" id="admin-item-price" class="form-control" placeholder="e.g. $1,800.00" required />
+            <input type="text" id="admin-item-price" class="form-control" placeholder="e.g. $1,800.00"/>
           </div>
         </div>
 
@@ -1355,6 +1357,8 @@
     // Categories in explicit requested order
     const categoryOrder = [
       "Lunch Selection",
+      "Side Selection",
+      "Filler Selection",
       "Soft Drinks",
       "Dinner Selection",
       "Shaken Cocktails",
@@ -1370,6 +1374,27 @@
 
     // Menu Item Database matching exact images provided
     const initialSeedData = [
+      // 0. Lunch Selection (from Saturday Lunch Menu Image)
+      // PROTEIN
+      { category: "Lunch Selection", name: "FRIED CHICKEN", price: "$1,400.00", subtitle: "PROTEIN", available: true },
+      { category: "Lunch Selection", name: "CURRIED GOAT", price: "$2,000.00", subtitle: "PROTEIN", available: true },
+      { category: "Lunch Selection", name: "OXTAIL&BEAN", price: "$2,300.00", subtitle: "PROTEIN", available: true },
+      { category: "Lunch Selection", name: "VEGAN", price: "$1,700.00", subtitle: "PROTEIN", available: true },
+      { category: "Lunch Selection", name: "COW FOOT", price: "$1,500.00", subtitle: "PROTEIN", available: true },
+      { category: "Lunch Selection", name: "BROWN STEW SLICE FISH", price: "$1,700.00", subtitle: "PROTEIN", available: true },
+      { category: "Lunch Selection", name: "BAKE CHICKEN", price: "$1,500.00", subtitle: "PROTEIN", available: true },
+      { category: "Lunch Selection", name: "BARBI FRY CHICKEN", price: "$1,500.00", subtitle: "PROTEIN", available: true },
+      
+      // SIDE
+      { category: "Lunch Selection", name: "RICE & PEAS", price: "$500.00", subtitle: "SIDE", available: true },
+      { category: "Lunch Selection", name: "PLAIN RICE", price: "$500.00", subtitle: "SIDE", available: true },
+      { category: "Lunch Selection", name: "MASH POTATO", price: "$500.00", subtitle: "SIDE", available: true },
+
+      // FILLER
+      { category: "Lunch Selection", name: "TOSSED VEG", price: "$500.00", subtitle: "FILLER", available: true },
+      { category: "Lunch Selection", name: "PASTA", price: "$500.00", subtitle: "FILLER", available: true },
+      { category: "Lunch Selection", name: "STEAM VEG", price: "$500.00", subtitle: "FILLER", available: true },
+
       // 1. Dinner Selection (formerly Entrees)
       { category: "Dinner Selection", name: "Slow-Braised Curried Goat", price: "$2,700.00", description: "Rich, aromatic mutton slow-cooked until fork-tender", subtitle: "EACH ENTREE IS SERVED WITH 1 SIDE OF YOUR CHOICE AND SEASONAL SAUTEED VEGETABLES", available: true },
       { category: "Dinner Selection", name: "Tender Oxtail & Butter Beans", price: "$3,000.00", description: "Melt-off-the-bone oxtail in a savoury reduction with butter beans", available: true },
@@ -1530,7 +1555,7 @@
     function createLuxuryMenuItemCard(item) {
       const isAvailable = item.available !== false;
       const card = document.createElement("div");
-      card.className = `luxury-menu-card ${!isAvailable ? 'Not Available' : ''}`;
+      card.className = `luxury-menu-card ${!isAvailable ? 'out-of-stock' : ''}`;
 
       const imgSrc = item.imageUrl ? item.imageUrl : 'logo.png';
 
