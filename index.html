@@ -4,12 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rizz23 Ultra Lounge | Fine Dining & VIP Experience</title>
-  
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
   <style>
     :root {
       --bg-dark: #050505;
@@ -959,13 +960,16 @@
       header {
         padding: 1rem 4%;
       }
+
       .dining-section, .events-section, .menu-container {
         padding: 4rem 4%;
       }
+
       .dining-grid {
         grid-template-columns: 1fr;
         gap: 2.5rem;
       }
+
       .dining-image-frame img {
         height: 300px;
       }
@@ -1060,6 +1064,53 @@
         padding: 0.6rem 1rem;
         font-size: 0.75rem;
       }
+
+      /* Clean up menu cards on mobile */
+      .menu-card, .item-card {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center;
+        background: var(--card-bg, #0d0d0d) !important;
+        border: 1px solid var(--border-gold, rgba(212, 175, 55, 0.25)) !important;
+        border-radius: 12px !important;
+        padding: 12px !important;
+        margin-bottom: 12px !important;
+      }
+
+      .menu-card img, .item-image, .menu-item-image {
+        width: 80px !important;
+        height: 80px !important;
+        min-width: 80px !important;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-right: 12px;
+      }
+
+      .menu-card h3, .item-title {
+        font-size: 0.95rem !important;
+        font-weight: 600;
+        color: var(--text-light, #f9f9f9) !important;
+        margin-bottom: 4px !important;
+        line-height: 1.2;
+      }
+
+      .menu-card .price, .item-price {
+        font-size: 0.95rem !important;
+        font-weight: bold;
+        color: var(--gold-primary, #d4af37) !important;
+      }
+
+      .menu-card button, .add-to-order-btn {
+        background: var(--gold-primary, #d4af37) !important;
+        color: #000000 !important;
+        border: none !important;
+        padding: 6px 12px !important;
+        border-radius: 6px !important;
+        font-size: 0.75rem !important;
+        font-weight: bold !important;
+        cursor: pointer;
+        margin-top: 6px;
+      }
     }
   </style>
 </head>
@@ -1080,11 +1131,10 @@
       <a href="#dining">Dining</a>
       <a href="#menu">Menu</a>
       <a href="reservation.html">Book Celebrations</a>
-      
     </nav>
     <div class="nav-actions">
       <button class="btn-admin-toggle" onclick="openAdminModal()">Rizz23 Admin</button>
-      <a href="#menu" id="vip-header-btn" class="btn-gold">Order & Pay Online</a>
+      <a href="#menu" id="vip-header-btn" class="btn-gold">Order &amp; Pay Online</a>
     </div>
   </header>
 
@@ -1096,7 +1146,7 @@
     </div>
     <p>An exquisite culinary journey featuring prime lunch cuts, luxury dinners, and high-energy VIP lounge experiences.</p>
     <div class="hero-actions">
-      <a href="#menu" class="btn-gold">Explore & Pay Online</a>
+      <a href="#menu" class="btn-gold">Explore &amp; Pay Online</a>
       <a href="reservation.html" class="btn-outline">Book Celebration</a>
     </div>
   </section>
@@ -1105,13 +1155,13 @@
   <section class="dining-section" id="dining">
     <div class="dining-grid">
       <div class="dining-content">
-        <span class="hero-tag">Atmosphere & Sophistication</span>
+        <span class="hero-tag">Atmosphere &amp; Sophistication</span>
         <h3 class="gold-text">The Fine Dining Experience</h3>
         <p>At Rizz23 Ultra Lounge, we elevate dining into an art form. Our culinary team crafts world-class dishes using sustainable, top-tier ingredients, served in an ambiance designed for celebration and indulgence.</p>
         <ul class="dining-features">
-          <li><span>◆</span> Gourmet Lunch & Dinner Curations</li>
-          <li><span>◆</span> Sommelier-Crafted Wine & Artisanal Cocktail List</li>
-          <li><span>◆</span> Intimate Lighting & Private Dining</li>
+          <li><span>◆</span> Gourmet Lunch &amp; Dinner Curations</li>
+          <li><span>◆</span> Sommelier-Crafted Wine &amp; Artisanal Cocktail List</li>
+          <li><span>◆</span> Intimate Lighting &amp; Private Dining</li>
         </ul>
 
         <div class="dining-info-box">
@@ -1122,7 +1172,7 @@
           <p style="margin-top: 0.5rem; color: var(--gold-light);"><strong>Lunch Service:</strong> 11:00 AM – 6:00 PM</p>
           <p style="color: var(--gold-light);"><strong>Dinner Service:</strong> 6:00 PM – 12:00 AM</p>
           
-          <h4 style="margin-top: 1rem;">Location & Contact</h4>
+          <h4 style="margin-top: 1rem;">Location &amp; Contact</h4>
           <p>📍 23A Central Plaza, Half Way Tree</p>
           <p>📞 <a href="tel:8762252525" style="color: inherit; text-decoration: none;">876-225-2525</a> / <a href="tel:8762298555" style="color: inherit; text-decoration: none;">876-229-8555</a></p>
         </div>
@@ -1130,7 +1180,7 @@
         <a href="reservation.html" class="btn-outline" style="margin-top: 1.5rem; display: inline-block;">Inquire For Dining Groups</a>
       </div>
       <div class="dining-image-frame">
-       <video src="video.mp4" autoplay muted loop playsinline style="width: 100%; height: auto; border-radius: 8px;"></video>
+        <video src="video.mp4" autoplay muted loop playsinline style="width: 100%; height: auto; border-radius: 8px;"></video>
       </div>
     </div>
   </section>
@@ -1151,7 +1201,7 @@
     <div class="events-grid">
       <div class="events-info">
         <span class="hero-tag">Host Your Special Moments</span>
-        <h3 class="gold-text">Birthday Wedding Reception Baby Shower & Venue Rental Packages</h3>
+        <h3 class="gold-text">Birthday Wedding Reception Baby Shower &amp; Venue Rental Packages</h3>
         <p>Whether you are hosting an intimate birthday dinner, wedding reception, baby Shower or an exclusive night out in our VIP lounge, Rizz23 provides tailored event packages to fit your exact vision.</p>
         
         <div class="event-card-types">
@@ -1162,11 +1212,11 @@
             </div>
             <p style="font-weight: 600; color: var(--gold-light); font-size: 0.85rem;">Max: 30 Guests</p>
             <ul>
-              <li>8x12 Sugar & Spice Cake</li>
+              <li>8x12 Sugar &amp; Spice Cake</li>
               <li>Balloon Arch</li>
               <li>Light-Up Number</li>
               <li>5ft Photo Backdrop / Welcome Sign</li>
-              <li>Elegant Chargers & Stylish Table Runners</li>
+              <li>Elegant Chargers &amp; Stylish Table Runners</li>
               <li>Elaborate Centerpieces</li>
             </ul>
           </div>
@@ -1178,9 +1228,9 @@
             </div>
             <p style="font-weight: 600; color: var(--gold-light); font-size: 0.85rem;">Max: 25 Guests</p>
             <ul>
-              <li>8x12 Sugar & Spice Cake</li>
-              <li>Balloon Arch & Light-Up Number</li>
-              <li>Elegant Chargers & Stylish Table Runners</li>
+              <li>8x12 Sugar &amp; Spice Cake</li>
+              <li>Balloon Arch &amp; Light-Up Number</li>
+              <li>Elegant Chargers &amp; Stylish Table Runners</li>
               <li>Chic Centerpieces</li>
             </ul>
           </div>
@@ -1192,7 +1242,7 @@
             </div>
             <p style="font-weight: 600; color: var(--gold-light); font-size: 0.85rem;">Max: 15 Guests</p>
             <ul>
-              <li>8x8 Sugar & Spice Cake</li>
+              <li>8x8 Sugar &amp; Spice Cake</li>
               <li>Simple Balloon Arch</li>
               <li>Table Décor</li>
             </ul>
@@ -1200,7 +1250,7 @@
         </div>
 
         <div class="policy-box">
-          <h5>Payment & Late Arrival Policy</h5>
+          <h5>Payment &amp; Late Arrival Policy</h5>
           <p>• 50% Deposit required 1 week in advance. Balance due day of event. Deposits are non-refundable.</p>
           <p>• After 30 minutes grace period, table will no longer be available.</p>
         </div>
@@ -1234,17 +1284,17 @@
         </div>
 
         <div class="form-group">
-          <label>Full Name on Card</label>
+          <label for="card-name">Full Name on Card</label>
           <input type="text" id="card-name" class="form-control" placeholder="John Doe" required />
         </div>
         
         <div class="form-group">
-          <label>Email Address</label>
+          <label for="card-email">Email Address</label>
           <input type="email" id="card-email" class="form-control" placeholder="john@example.com" required />
         </div>
 
         <div class="form-group">
-          <label>Table Number or Address</label>
+          <label for="delivery-info">Table Number or Address</label>
           <input type="text" id="delivery-info" class="form-control" placeholder="Table #5 / Pickup / Delivery Address" required />
         </div>
 
@@ -1261,13 +1311,13 @@
       
       <form id="admin-add-form" onsubmit="handleAddNewItem(event)">
         <div class="form-group">
-          <label>Item Name</label>
-          <input type="text" id="admin-item-name" class="form-control" placeholder="e.g. Caviar & Champagne Service" required />
+          <label for="admin-item-name">Item Name</label>
+          <input type="text" id="admin-item-name" class="form-control" placeholder="e.g. Caviar &amp; Champagne Service" required />
         </div>
         
         <div style="display: flex; gap: 1rem;">
           <div class="form-group" style="flex: 1;">
-            <label>Category</label>
+            <label for="admin-item-category">Category</label>
             <select id="admin-item-category" class="form-control" required>
               <option value="Lunch Selection">Lunch Selection</option>
               <option value="Side Selection">Side Selection</option>
@@ -1275,29 +1325,29 @@
               <option value="Soft Drinks">Soft Drinks Selection</option>
               <option value="Dinner Selection">Dinner Selection</option>
               <option value="Shaken Cocktails">Shaken Cocktails</option>
-              <option value="Margaritas & Martinis">Margaritas & Martinis</option>
-              <option value="Wines & Creamy">Wines & Creamy</option>
+              <option value="Margaritas &amp; Martinis">Margaritas &amp; Martinis</option>
+              <option value="Wines &amp; Creamy">Wines &amp; Creamy</option>
               <option value="Shots">Shots</option>
-              <option value="Beer & Stout">Beer & Stout</option>
+              <option value="Beer &amp; Stout">Beer &amp; Stout</option>
               <option value="Appetizers">Appetizers</option>
-              <option value="Rizz23 Sandwiches, Burgers, Pasta & Extras">Rizz23 Sandwiches, Burgers, Pasta & Extras</option>
-              <option value="Sides & Add-Ons">Sides & Add-Ons</option>
+              <option value="Rizz23 Sandwiches, Burgers, Pasta &amp; Extras">Rizz23 Sandwiches, Burgers, Pasta &amp; Extras</option>
+              <option value="Sides &amp; Add-Ons">Sides &amp; Add-Ons</option>
               <option value="Desserts">Desserts Selection</option>
             </select>
           </div>
           <div class="form-group" style="flex: 1;">
-            <label>Price ($)</label>
+            <label for="admin-item-price">Price ($)</label>
             <input type="text" id="admin-item-price" class="form-control" placeholder="e.g. $1,800.00"/>
           </div>
         </div>
 
         <div class="form-group">
-          <label>Item Image URL (Optional)</label>
+          <label for="admin-item-image">Item Image URL (Optional)</label>
           <input type="text" id="admin-item-image" class="form-control" placeholder="e.g. https://example.com/item.jpg or image.png" />
         </div>
 
         <div class="form-group">
-          <label>Description / Ingredients</label>
+          <label for="admin-item-desc">Description / Ingredients</label>
           <textarea id="admin-item-desc" class="form-control" rows="2" placeholder="List spirits, mixers, or food details..."></textarea>
         </div>
 
@@ -1309,15 +1359,15 @@
   <!-- Footer -->
   <footer>
     <p class="gold-text" style="font-family: var(--font-heading); letter-spacing: 2px;">RIZZ23 ULTRA LOUNGE</p>
-    <p>High-End Dining & VIP Nightlife Experience</p>
-   <div class="footer-social-links">
-    <a href="https://www.instagram.com/rizz23ultralounge?stkn=MW1scnpwy24xMDBlbQ==" target="_blank" aria-label="Instagram">
+    <p>High-End Dining &amp; VIP Nightlife Experience</p>
+    <div class="footer-social-links">
+      <a href="https://www.instagram.com/rizz23ultralounge?stkn=MW1scnpwy24xMDBlbQ==" target="_blank" aria-label="Instagram">
         <i class="fab fa-instagram"></i> Instagram
-    </a>
-    <a href="https://www.tiktok.com/@rizz23ultralounge?_r=1&_t=ZS-99jsG5sSWU8" target="_blank" aria-label="TikTok">
+      </a>
+      <a href="https://www.tiktok.com/@rizz23ultralounge?_r=1&amp;_t=ZS-99jsG5sSWU8" target="_blank" aria-label="TikTok">
         <i class="fab fa-tiktok"></i> TikTok
-    </a>
-</div>
+      </a>
+    </div>
     <p style="margin-top: 0.5rem; color: var(--text-light);">📍 23A Central Plaza, Half Way Tree</p>
     <p style="color: var(--text-light);">📞 <a href="tel:8762252525">876-225-2525</a> | <a href="tel:8762298555">876-229-8555</a></p>
     <p style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-muted);">
