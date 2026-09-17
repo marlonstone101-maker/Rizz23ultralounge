@@ -590,6 +590,24 @@
       opacity: 0.55;
     }
 
+    /* Menu Item Round Circle Image Styling */
+    .menu-item-circle-img-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 0.8rem;
+    }
+
+    .menu-item-circle-img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--gold-primary);
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+      background-color: #000;
+    }
+
     .card-top-header {
       display: flex;
       justify-content: space-between;
@@ -1272,6 +1290,11 @@
         </div>
 
         <div class="form-group">
+          <label>Item Image URL (Optional)</label>
+          <input type="text" id="admin-item-image" class="form-control" placeholder="e.g. https://example.com/item.jpg or image.png" />
+        </div>
+
+        <div class="form-group">
           <label>Description / Ingredients</label>
           <textarea id="admin-item-desc" class="form-control" rows="2" placeholder="List spirits, mixers, or food details..."></textarea>
         </div>
@@ -1509,8 +1532,13 @@
       const card = document.createElement("div");
       card.className = `luxury-menu-card ${!isAvailable ? 'Not Available' : ''}`;
 
+      const imgSrc = item.imageUrl ? item.imageUrl : 'logo.png';
+
       card.innerHTML = `
         <div>
+          <div class="menu-item-circle-img-container">
+            <img src="${imgSrc}" alt="${item.name}" class="menu-item-circle-img" onerror="this.onerror=null;this.src='logo.png';" />
+          </div>
           <div class="card-top-header">
             <h4 class="card-item-title">${item.name}</h4>
             <span class="card-item-price">${item.price}</span>
@@ -1530,6 +1558,8 @@
             <div class="admin-actions-group">
               <button class="btn-admin-action" onclick="toggleStock('${item.id}', ${isAvailable})">${isAvailable ? 'Mark Unavailable' : 'Mark Available'}</button>
               <button class="btn-admin-action" onclick="changePrice('${item.id}')">Edit Price</button>
+              <button class="btn-admin-action" onclick="updateItemImage('${item.id}')">${item.imageUrl ? 'Change Image' : 'Add Image'}</button>
+              ${item.imageUrl ? `<button class="btn-admin-action btn-admin-delete" onclick="deleteItemImage('${item.id}')">Delete Image</button>` : ''}
               <button class="btn-admin-action btn-admin-delete" onclick="deleteMenuItem('${item.id}')">Delete</button>
             </div>
           ` : ''}
@@ -1683,6 +1713,7 @@
       const name = document.getElementById("admin-item-name").value;
       const category = document.getElementById("admin-item-category").value;
       const price = document.getElementById("admin-item-price").value;
+      const imageUrl = document.getElementById("admin-item-image").value;
       const desc = document.getElementById("admin-item-desc").value;
       const formattedPrice = price.startsWith("$") ? price : `$${price}`;
 
@@ -1692,6 +1723,7 @@
           name: name,
           description: desc,
           price: formattedPrice,
+          imageUrl: imageUrl || "",
           available: true,
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
@@ -1734,6 +1766,41 @@
           } catch (error) {
             alert("Error updating price: " + error.message);
           }
+        }
+      }
+    }
+
+    async function updateItemImage(id) {
+      const item = currentMenuItems.find(i => i.id === id);
+      if (item) {
+        const newUrl = prompt(`Enter Image URL for ${item.name}:`, item.imageUrl || "");
+        if (newUrl !== null) {
+          try {
+            if (id.startsWith("seed_")) {
+              item.imageUrl = newUrl.trim();
+            } else {
+              await db.collection("menuItems").doc(id).update({ imageUrl: newUrl.trim() });
+            }
+            renderLuxuryMenu();
+          } catch (error) {
+            alert("Error updating image URL: " + error.message);
+          }
+        }
+      }
+    }
+
+    async function deleteItemImage(id) {
+      const item = currentMenuItems.find(i => i.id === id);
+      if (item && confirm(`Are you sure you want to delete the image for ${item.name}?`)) {
+        try {
+          if (id.startsWith("seed_")) {
+            delete item.imageUrl;
+          } else {
+            await db.collection("menuItems").doc(id).update({ imageUrl: "" });
+          }
+          renderLuxuryMenu();
+        } catch (error) {
+          alert("Error deleting image: " + error.message);
         }
       }
     }
