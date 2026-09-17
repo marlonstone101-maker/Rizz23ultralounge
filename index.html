@@ -64,8 +64,77 @@
       font-size: 1.25rem;
       color: var(--text-muted);
       text-align: center;
-      margin-bottom: 3rem;
+      margin-bottom: 2rem;
       font-style: italic;
+    }
+
+    /* Category Dropdown Navigation Styling */
+    .menu-category-dropdown-wrapper {
+      max-width: 480px;
+      margin: 0 auto 2.5rem auto;
+      text-align: center;
+      padding: 0 1rem;
+    }
+
+    .menu-dropdown-label {
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      color: var(--gold-light);
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+
+    .menu-dropdown-container {
+      position: relative;
+      width: 100%;
+    }
+
+    .category-select-dropdown {
+      width: 100%;
+      padding: 0.85rem 2.8rem 0.85rem 1.2rem;
+      background-color: #0d0d0d;
+      color: var(--gold-light);
+      border: 1px solid var(--border-gold-bright);
+      border-radius: 30px;
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+      transition: all 0.3s ease;
+    }
+
+    .category-select-dropdown:focus, .category-select-dropdown:hover {
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+      background-color: #141414;
+    }
+
+    .category-select-dropdown option {
+      background-color: #0a0a0a;
+      color: #ffffff;
+      padding: 10px;
+      font-size: 0.85rem;
+      text-transform: none;
+    }
+
+    .dropdown-icon {
+      position: absolute;
+      right: 1.2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gold-primary);
+      pointer-events: none;
+      font-size: 0.85rem;
+      transition: transform 0.3s ease;
     }
 
     /* Header & Navigation */
@@ -526,6 +595,7 @@
 
     .menu-category-section {
       margin-bottom: 4rem;
+      scroll-margin-top: 100px;
     }
 
     .menu-category-section:last-child {
@@ -1042,6 +1112,10 @@
       .booking-cta-card {
         padding: 2rem 1.2rem;
       }
+
+      .menu-category-dropdown-wrapper {
+        margin-bottom: 2rem;
+      }
     }
 
     @media (max-width: 480px) {
@@ -1189,6 +1263,17 @@
   <section class="menu-container" id="menu">
     <h2 class="section-title gold-text">Curated Culinary Menu</h2>
     <p class="section-subtitle">Lunch: 11 AM - 6 PM | Dinner: 6 PM - 12 AM</p>
+
+    <!-- Interactive Category Navigation Dropdown -->
+    <div class="menu-category-dropdown-wrapper">
+      <label for="menu-category-select" class="menu-dropdown-label">Jump to Menu Category</label>
+      <div class="menu-dropdown-container">
+        <select id="menu-category-select" class="category-select-dropdown" onchange="scrollToCategory(this.value)">
+          <option value="" disabled selected>-- Select a Category --</option>
+        </select>
+        <i class="fas fa-chevron-down dropdown-icon"></i>
+      </div>
+    </div>
 
     <!-- Menu Display Grid Frame -->
     <div class="menu-watermark-bg" id="menu-watermark-container">
@@ -1568,8 +1653,14 @@
 
     function renderLuxuryMenu() {
       const container = document.getElementById("luxury-menu-display");
+      const dropdown = document.getElementById("menu-category-select");
+
       if (!container) return;
       container.innerHTML = "";
+
+      if (dropdown) {
+        dropdown.innerHTML = `<option value="" disabled selected>-- Select a Category --</option>`;
+      }
 
       let hasItems = false;
 
@@ -1577,8 +1668,19 @@
         const catItems = currentMenuItems.filter(i => i.category === catName);
         if (catItems.length > 0) {
           hasItems = true;
+          const sectionId = "cat-" + catName.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase();
+
+          // Populate Category Dropdown
+          if (dropdown) {
+            const opt = document.createElement("option");
+            opt.value = sectionId;
+            opt.textContent = catName;
+            dropdown.appendChild(opt);
+          }
+
           const catSection = document.createElement("div");
           catSection.className = "menu-category-section";
+          catSection.id = sectionId;
 
           const catHeader = document.createElement("div");
           catHeader.className = "menu-category-header";
@@ -1599,6 +1701,14 @@
 
       if (!hasItems) {
         container.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding: 3rem 0;">No menu items currently available.</p>`;
+      }
+    }
+
+    function scrollToCategory(sectionId) {
+      if (!sectionId) return;
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
 
