@@ -144,7 +144,7 @@ app.post('/api/create-payment', async (req, res) => {
       method: 'credit_card',
       order_id: order_id,
       origin: 'Rizz23UltraLounge',
-      response_url: 'https://rizz23ultralounge.com/payment-complete',
+      response_url: 'https://rizz23ultralounge.com/payment-complete', 
       total: parsedAmount.toFixed(2)
     }).toString();
 
