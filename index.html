@@ -907,8 +907,8 @@
       text-align: center;
     }
 
-    /* Bank Transfer Info Card Styling */
-    .bank-info-box {
+    /* WiPay Info Card Styling */
+    .wipay-info-box {
       background: rgba(212, 175, 55, 0.08);
       border: 1px dashed var(--border-gold-bright);
       border-radius: 8px;
@@ -916,7 +916,7 @@
       margin-bottom: 1.2rem;
     }
 
-    .bank-info-box h4 {
+    .wipay-info-box h4 {
       color: var(--gold-primary);
       font-family: var(--font-heading);
       font-size: 0.95rem;
@@ -928,18 +928,22 @@
       gap: 8px;
     }
 
-    .bank-details-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.5rem;
+    .wipay-details-grid {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      gap: 1rem;
       font-size: 0.82rem;
     }
 
-    .bank-details-grid p {
+    .wipay-details-grid p {
       color: var(--text-light);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .bank-details-grid strong {
+    .wipay-details-grid strong {
       color: var(--gold-light);
     }
 
@@ -1227,8 +1231,9 @@
         margin-top: 6px;
       }
 
-      .bank-details-grid {
-        grid-template-columns: 1fr;
+      .wipay-details-grid {
+        flex-direction: column;
+        align-items: flex-start;
       }
     }
   </style>
@@ -1396,13 +1401,13 @@
     </div>
   </section>
 
-  <!-- Order / Payment Modal Overlay (Bank Transfer & Receipt Upload Option) -->
+  <!-- Order / Payment Modal Overlay (WiPay Payment Option) -->
   <div class="modal-overlay" id="payment-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closePaymentModal()">&times;</button>
       <h3 class="gold-text" style="font-family: var(--font-heading); font-size: 1.6rem; margin-bottom: 1.5rem; text-align: center;">Your Order Summary</h3>
       
-      <form id="card-checkout-form" onsubmit="processBankTransferOrder(event)">
+      <form id="card-checkout-form" onsubmit="processWiPayOrder(event)">
         <div style="margin-bottom: 1.2rem; background: #000; padding: 1rem; border-radius: 6px; border: 1px solid var(--border-gold);">
           <div id="order-items-container" class="order-items-list">
             <!-- Dynamically populates items in order -->
@@ -1413,17 +1418,16 @@
           </div>
         </div>
 
-        <!-- Bank Transfer Details Display Box -->
-        <div class="bank-info-box">
-          <h4><i class="fas fa-university"></i> Bank Transfer Information</h4>
-          <div class="bank-details-grid">
-            <p><strong>Bank:</strong> National Commercial Bank (NCB)</p>
-            <p><strong>Account Name:</strong> Rizz23 Ultra Lounge</p>
-            <p><strong>Account #:</strong> 123456789</p>
-            <p><strong>Branch / Type:</strong> Half Way Tree / Chequing</p>
+        <!-- WiPay Details Display Box -->
+        <div class="wipay-info-box">
+          <h4><i class="fas fa-credit-card"></i> WiPay Secure Payment</h4>
+          <div class="wipay-details-grid">
+            <p><i class="fab fa-cc-visa" style="color: #4A90E2; font-size: 1.2rem;"></i> Visa &amp; Mastercard</p>
+            <p><i class="fas fa-ticket-alt" style="color: #D4AF37; font-size: 1.1rem;"></i> WiPay Vouchers</p>
+            <p><i class="fas fa-shield-alt" style="color: #2ECC71; font-size: 1.1rem;"></i> Encrypted Checkout</p>
           </div>
-          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; font-style: italic;">
-            * Please transfer the exact total above and upload your payment receipt screenshot below.
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; font-style: italic; text-align: center;">
+            * You will be directed to WiPay's secure gateway to complete your card payment.
           </p>
         </div>
 
@@ -1438,17 +1442,18 @@
         </div>
 
         <div class="form-group">
+          <label for="card-phone">Phone Number</label>
+          <input type="tel" id="card-phone" class="form-control" placeholder="876-555-0199" required />
+        </div>
+
+        <div class="form-group">
           <label for="delivery-info">Table Number or Address</label>
           <input type="text" id="delivery-info" class="form-control" placeholder="Table #5 / Pickup / Delivery Address" required />
         </div>
 
-        <!-- Receipt Upload Field -->
-        <div class="form-group">
-          <label for="receipt-upload"><i class="fas fa-paperclip"></i> Upload Bank Payment Receipt / Screenshot</label>
-          <input type="file" id="receipt-upload" class="form-control" accept="image/*,.pdf" required />
-        </div>
-
-        <button type="submit" class="btn-gold" style="width: 100%; border-radius: 6px; margin-top: 1rem;">Submit Order &amp; Receipt</button>
+        <button type="submit" id="pay-wipay-btn" class="btn-gold" style="width: 100%; border-radius: 6px; margin-top: 1rem;">
+          <i class="fas fa-lock"></i> Pay Now with WiPay
+        </button>
       </form>
     </div>
   </div>
@@ -1885,7 +1890,7 @@
       modal.style.display = "none";
     }
 
-    async function processBankTransferOrder(e) {
+    async function processWiPayOrder(e) {
       e.preventDefault();
 
       if (order.length === 0) {
@@ -1895,36 +1900,58 @@
 
       const name = document.getElementById("card-name").value;
       const email = document.getElementById("card-email").value;
+      const phone = document.getElementById("card-phone").value;
       const delivery = document.getElementById("delivery-info").value;
-      const receiptInput = document.getElementById("receipt-upload");
+      const submitBtn = document.getElementById("pay-wipay-btn");
 
-      if (!receiptInput.files || receiptInput.files.length === 0) {
-        alert("Please upload your bank transfer payment receipt before submitting.");
-        return;
-      }
-
-      const file = receiptInput.files[0];
       const totalAmount = order.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
       try {
-        await db.collection("customerOrders").add({
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Redirecting to WiPay...";
+
+        // Record order in Firestore first
+        const docRef = await db.collection("customerOrders").add({
           customerName: name,
           email: email,
+          phone: phone,
           deliveryInfo: delivery,
           items: order,
           totalAmount: totalAmount,
-          receiptFileName: file.name,
-          paymentMethod: "Bank Transfer",
+          paymentMethod: "WiPay Online",
+          status: "Pending Payment",
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        alert("Thank you! Your order and bank transfer receipt have been submitted successfully. We will verify your payment shortly.");
-        order = [];
-        updateorderUI();
-        document.getElementById("card-checkout-form").reset();
-        closePaymentModal();
+        // Call Express backend to create WiPay payment URL
+        const response = await fetch("/api/wipay/checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            orderId: docRef.id,
+            totalAmount: totalAmount,
+            customerName: name,
+            email: email,
+            phone: phone
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          alert("Order created! Proceeding with order processing.");
+          order = [];
+          updateorderUI();
+          document.getElementById("card-checkout-form").reset();
+          closePaymentModal();
+        }
       } catch (error) {
-        alert("Error submitting order: " + error.message);
+        alert("Error creating payment session: " + error.message);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-lock"></i> Pay Now with WiPay';
       }
     }
 
@@ -2032,9 +2059,9 @@
         if (newUrl !== null) {
           try {
             if (id.startsWith("seed_")) {
-              item.imageUrl = newUrl.trim();
+              item.imageUrl = newUrl;
             } else {
-              await db.collection("menuItems").doc(id).update({ imageUrl: newUrl.trim() });
+              await db.collection("menuItems").doc(id).update({ imageUrl: newUrl });
             }
             renderLuxuryMenu();
           } catch (error) {
@@ -2046,10 +2073,10 @@
 
     async function deleteItemImage(id) {
       const item = currentMenuItems.find(i => i.id === id);
-      if (item && confirm(`Are you sure you want to delete the image for ${item.name}?`)) {
+      if (item && confirm(`Are you sure you want to delete the image for "${item.name}"?`)) {
         try {
           if (id.startsWith("seed_")) {
-            delete item.imageUrl;
+            item.imageUrl = "";
           } else {
             await db.collection("menuItems").doc(id).update({ imageUrl: "" });
           }
@@ -2061,10 +2088,12 @@
     }
 
     async function deleteMenuItem(id) {
-      if (confirm("Are you sure you want to delete this item?")) {
+      const item = currentMenuItems.find(i => i.id === id);
+      if (item && confirm(`Are you sure you want to delete "${item.name}" from the menu?`)) {
         try {
           if (id.startsWith("seed_")) {
-            currentMenuItems = currentMenuItems.filter(i => i.id !== id);
+            const index = currentMenuItems.findIndex(i => i.id === id);
+            if (index !== -1) currentMenuItems.splice(index, 1);
           } else {
             await db.collection("menuItems").doc(id).delete();
           }

@@ -618,34 +618,6 @@
         <h2 class="form-title gold-text">Reserve Your Slot</h2>
       </div>
 
-      <!-- Bank Transfer Information Box -->
-      <div style="background: rgba(212, 175, 55, 0.08); border: 1px dashed var(--border-gold-bright); border-radius: 8px; padding: 1.2rem; margin-bottom: 1.8rem;">
-        <h4 style="font-family: var(--font-heading); color: var(--gold-primary); font-size: 0.95rem; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 8px;">
-          🏛️ BANK TRANSFER INFORMATION
-        </h4>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.8rem; font-size: 0.85rem;">
-          <div>
-            <span style="color: var(--text-muted); display: block;">Bank:</span>
-            <strong style="color: #fff;">National Commercial Bank (NCB)</strong>
-          </div>
-          <div>
-            <span style="color: var(--text-muted); display: block;">Account Name:</span>
-            <strong style="color: #fff;">Rizz23 Ultra Lounge</strong>
-          </div>
-          <div>
-            <span style="color: var(--text-muted); display: block;">Account #:</span>
-            <strong style="color: var(--gold-primary); font-size: 1rem;">123456789</strong>
-          </div>
-          <div>
-            <span style="color: var(--text-muted); display: block;">Branch / Type:</span>
-            <strong style="color: #fff;">Half Way Tree / Chequing</strong>
-          </div>
-        </div>
-        <p style="font-size: 0.78rem; color: var(--gold-light); font-style: italic; margin-top: 0.8rem; border-top: 1px solid rgba(212, 175, 55, 0.2); padding-top: 0.5rem;">
-          * Please transfer the required deposit amount to the bank account above and upload your payment receipt screenshot below.
-        </p>
-      </div>
-
       <form id="reservation-form" enctype="multipart/form-data" onsubmit="handleReservationSubmit(event)">
         
         <!-- Guest Details -->
@@ -760,13 +732,7 @@
           <textarea id="res-notes" class="form-control" rows="3" placeholder="Birthday name, cake message, dietary preferences..."></textarea>
         </div>
 
-        <!-- Bank Transfer Receipt Upload Field -->
-        <div class="form-group">
-          <label for="receipt">Upload Bank Transfer Deposit Receipt</label>
-          <input type="file" id="receipt" class="form-control" accept="image/*,.pdf" required />
-        </div>
-
-        <button type="submit" id="submit-btn" class="btn-gold">Submit Reservation & Receipt</button>
+        <button type="submit" id="submit-btn" class="btn-gold">Pay Deposit via WiPay Card</button>
       </form>
     </div>
 
@@ -812,8 +778,9 @@
       calculatedDepositAmount = totalPrice * 0.50;
 
       const submitBtn = document.getElementById('submit-btn');
+
       if (calculatedDepositAmount > 0) {
-        submitBtn.innerText = `Submit Reservation (50% Deposit: $${calculatedDepositAmount.toLocaleString()} JMD)`;
+        submitBtn.innerText = `Pay 50% Deposit via WiPay ($${calculatedDepositAmount.toLocaleString()} JMD)`;
       } else {
         submitBtn.innerText = "Submit Reservation Request";
       }
@@ -824,20 +791,11 @@
 
       const submitBtn = document.getElementById('submit-btn');
       const originalText = submitBtn.innerText;
-      submitBtn.innerText = "Submitting Reservation...";
+      submitBtn.innerText = "Processing...";
       submitBtn.disabled = true;
 
-      const receiptInput = document.getElementById('receipt');
-      const receiptFile = receiptInput ? receiptInput.files[0] : null;
-
-      if (!receiptFile && calculatedDepositAmount > 0) {
-        alert("Please upload your bank transfer deposit receipt before submitting.");
-        submitBtn.innerText = originalText;
-        submitBtn.disabled = false;
-        return;
-      }
-
       const name = document.getElementById('res-name').value;
+      const email = document.getElementById('res-email').value;
       const phone = document.getElementById('res-phone').value;
       const date = document.getElementById('res-date').value;
       const time = document.getElementById('res-time').value;
@@ -848,42 +806,45 @@
       const specialColor = document.getElementById('res-color-special').value;
       const notes = document.getElementById('res-notes').value;
 
-      const formData = new FormData();
-      formData.append('name', name);
-      formData.append('phone', phone);
-      formData.append('orderType', 'VIP Reservation');
-      formData.append('orderDetails', `Date: ${date}, Time: ${time}, Guests: ${guests}, Package: ${pkg}, Colors: ${color1}/${color2} (${specialColor}), Notes: ${notes}`);
-      formData.append('totalAmount', calculatedDepositAmount || 0);
-      
-      if (receiptFile) {
-        formData.append('receipt', receiptFile);
-      }
-
+      // WIPAY ONLINE CREDIT/DEBIT CARD PAYMENT WORKFLOW
       try {
-        const response = await fetch('/api/submit-order', {
+        const payload = {
+          name: name,
+          email: email,
+          phone: phone,
+          orderType: 'VIP Reservation Deposit',
+          orderDetails: `Date: ${date}, Time: ${time}, Guests: ${guests}, Package: ${pkg}, Colors: ${color1}/${color2} (${specialColor}), Notes: ${notes}`,
+          totalAmount: calculatedDepositAmount || 0
+        };
+
+        const response = await fetch('/api/wipay-checkout', {
           method: 'POST',
-          body: formData
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
         });
 
         const result = await response.json();
-        if (result.success) {
-          alert("Success! Your reservation and bank transfer receipt have been submitted.");
-          window.location.reload();
+        if (result.url) {
+          window.location.href = result.url; // Redirect customer directly to WiPay payment page
+        } else if (result.success && result.redirectUrl) {
+          window.location.href = result.redirectUrl;
         } else {
-          alert("Error: " + (result.message || "Failed to submit reservation."));
+          alert("WiPay Error: " + (result.message || "Could not initiate online card payment."));
           submitBtn.innerText = originalText;
           submitBtn.disabled = false;
         }
       } catch (err) {
-        console.error("Submission error:", err);
-        alert("A network error occurred. Please check your connection and try again.");
+        console.error("WiPay Checkout Error:", err);
+        alert("A network error occurred while connecting to WiPay.");
         submitBtn.innerText = originalText;
         submitBtn.disabled = false;
       }
     }
 
     // Initialize on page load
-    document.addEventListener('DOMContentLoaded', calculateDeposit);
+    document.addEventListener('DOMContentLoaded', () => {
+      calculateDeposit();
+    });
   </script>
 </body>
 </html>
