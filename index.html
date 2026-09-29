@@ -907,6 +907,42 @@
       text-align: center;
     }
 
+    /* Bank Transfer Info Card Styling */
+    .bank-info-box {
+      background: rgba(212, 175, 55, 0.08);
+      border: 1px dashed var(--border-gold-bright);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .bank-info-box h4 {
+      color: var(--gold-primary);
+      font-family: var(--font-heading);
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bank-details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+    }
+
+    .bank-details-grid p {
+      color: var(--text-light);
+    }
+
+    .bank-details-grid strong {
+      color: var(--gold-light);
+    }
+
     /* Form & Checkout Field Styling Fix */
     .form-group {
       display: flex;
@@ -1027,10 +1063,11 @@
 
     /* Tablet & Mobile Responsiveness Optimization */
     html, body {
-  width: 100%;
-  max-width: 100vw;
-  overflow-x: hidden;
-}
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+
     @media (max-width: 1024px) {
       header {
         padding: 1rem 4%;
@@ -1144,7 +1181,6 @@
         font-size: 0.75rem;
       }
 
-      /* Clean up menu cards on mobile */
       .menu-card, .item-card {
         display: flex !important;
         flex-direction: row !important;
@@ -1189,6 +1225,10 @@
         font-weight: bold !important;
         cursor: pointer;
         margin-top: 6px;
+      }
+
+      .bank-details-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -1264,12 +1304,12 @@
     </div>
   </section>
 
-  <!-- Dynamic Menu Section (Luxurious Modern Layout with Rizz23 Watermark) -->
+  <!-- Dynamic Menu Section -->
   <section class="menu-container" id="menu">
     <h2 class="section-title gold-text">Curated Culinary Menu</h2>
     <p class="section-subtitle">Lunch: 11 AM - 6 PM | Dinner: 6 PM - 12 AM</p>
 
-    <!-- Interactive Category Navigation Dropdown -->
+    <!-- Category Navigation Dropdown -->
     <div class="menu-category-dropdown-wrapper">
       <label for="menu-category-select" class="menu-dropdown-label">Jump to Menu Category</label>
       <div class="menu-dropdown-container">
@@ -1356,14 +1396,14 @@
     </div>
   </section>
 
-  <!-- Order / Payment Modal Overlay -->
+  <!-- Order / Payment Modal Overlay (Bank Transfer & Receipt Upload Option) -->
   <div class="modal-overlay" id="payment-modal">
     <div class="modal-card">
       <button class="modal-close" onclick="closePaymentModal()">&times;</button>
       <h3 class="gold-text" style="font-family: var(--font-heading); font-size: 1.6rem; margin-bottom: 1.5rem; text-align: center;">Your Order Summary</h3>
       
-      <form id="card-checkout-form" onsubmit="processCardPayment(event)">
-        <div style="margin-bottom: 1.5rem; background: #000; padding: 1rem; border-radius: 6px; border: 1px solid var(--border-gold);">
+      <form id="card-checkout-form" onsubmit="processBankTransferOrder(event)">
+        <div style="margin-bottom: 1.2rem; background: #000; padding: 1rem; border-radius: 6px; border: 1px solid var(--border-gold);">
           <div id="order-items-container" class="order-items-list">
             <!-- Dynamically populates items in order -->
           </div>
@@ -1373,8 +1413,22 @@
           </div>
         </div>
 
+        <!-- Bank Transfer Details Display Box -->
+        <div class="bank-info-box">
+          <h4><i class="fas fa-university"></i> Bank Transfer Information</h4>
+          <div class="bank-details-grid">
+            <p><strong>Bank:</strong> National Commercial Bank (NCB)</p>
+            <p><strong>Account Name:</strong> Rizz23 Ultra Lounge</p>
+            <p><strong>Account #:</strong> 123456789</p>
+            <p><strong>Branch / Type:</strong> Half Way Tree / Chequing</p>
+          </div>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; font-style: italic;">
+            * Please transfer the exact total above and upload your payment receipt screenshot below.
+          </p>
+        </div>
+
         <div class="form-group">
-          <label for="card-name">Full Name on Card</label>
+          <label for="card-name">Full Name</label>
           <input type="text" id="card-name" class="form-control" placeholder="John Doe" required />
         </div>
         
@@ -1388,7 +1442,13 @@
           <input type="text" id="delivery-info" class="form-control" placeholder="Table #5 / Pickup / Delivery Address" required />
         </div>
 
-        <button type="submit" class="btn-gold" style="width: 100%; border-radius: 6px; margin-top: 1rem;">Proceed to Pay with Debit/Credit Card</button>
+        <!-- Receipt Upload Field -->
+        <div class="form-group">
+          <label for="receipt-upload"><i class="fas fa-paperclip"></i> Upload Bank Payment Receipt / Screenshot</label>
+          <input type="file" id="receipt-upload" class="form-control" accept="image/*,.pdf" required />
+        </div>
+
+        <button type="submit" class="btn-gold" style="width: 100%; border-radius: 6px; margin-top: 1rem;">Submit Order &amp; Receipt</button>
       </form>
     </div>
   </div>
@@ -1473,9 +1533,6 @@
 
   <!-- Application Logic -->
   <script>
-    const WIPAY_ACCOUNT_ID = "YOUR_WIPAY_ACCOUNT_ID"; 
-    const WIPAY_ENVIRONMENT = "live"; 
-
     const firebaseConfig = {
       apiKey: "AIzaSyBfR1RxhxovoVCCTWVfWdp4lTcyiNB4akQ",
       authDomain: "rizz23-79b31.firebaseapp.com",
@@ -1514,8 +1571,7 @@
 
     // Menu Item Database matching exact images provided
     const initialSeedData = [
-      // 0. Lunch Selection (from Saturday Lunch Menu Image)
-      // PROTEIN
+      // 0. Lunch Selection
       { category: "Lunch Selection", name: "FRIED CHICKEN", price: "$1,400.00", subtitle: "PROTEIN", available: true },
       { category: "Lunch Selection", name: "CURRIED GOAT", price: "$2,000.00", subtitle: "PROTEIN", available: true },
       { category: "Lunch Selection", name: "OXTAIL&BEAN", price: "$2,300.00", subtitle: "PROTEIN", available: true },
@@ -1525,17 +1581,15 @@
       { category: "Lunch Selection", name: "BAKE CHICKEN", price: "$1,500.00", subtitle: "PROTEIN", available: true },
       { category: "Lunch Selection", name: "BARBI FRY CHICKEN", price: "$1,500.00", subtitle: "PROTEIN", available: true },
       
-      // SIDE
       { category: "Lunch Selection", name: "RICE & PEAS", price: "$500.00", subtitle: "SIDE", available: true },
       { category: "Lunch Selection", name: "PLAIN RICE", price: "$500.00", subtitle: "SIDE", available: true },
       { category: "Lunch Selection", name: "MASH POTATO", price: "$500.00", subtitle: "SIDE", available: true },
 
-      // FILLER
       { category: "Lunch Selection", name: "TOSSED VEG", price: "$500.00", subtitle: "FILLER", available: true },
       { category: "Lunch Selection", name: "PASTA", price: "$500.00", subtitle: "FILLER", available: true },
       { category: "Lunch Selection", name: "STEAM VEG", price: "$500.00", subtitle: "FILLER", available: true },
 
-      // 1. Dinner Selection (formerly Entrees)
+      // 1. Dinner Selection
       { category: "Dinner Selection", name: "Slow-Braised Curried Goat", price: "$2,700.00", description: "Rich, aromatic mutton slow-cooked until fork-tender", subtitle: "EACH ENTREE IS SERVED WITH 1 SIDE OF YOUR CHOICE AND SEASONAL SAUTEED VEGETABLES", available: true },
       { category: "Dinner Selection", name: "Tender Oxtail & Butter Beans", price: "$3,000.00", description: "Melt-off-the-bone oxtail in a savoury reduction with butter beans", available: true },
       { category: "Dinner Selection", name: "Rizz23 Hickory-Glazed Baby Back Ribs", price: "$4,500.00", description: "Pork ribs smoked low and slow, finished with house glaze", available: true },
@@ -1675,7 +1729,6 @@
           hasItems = true;
           const sectionId = "cat-" + catName.replace(/[^a-zA-Z0-9]/g, "-").toLowerCase();
 
-          // Populate Category Dropdown
           if (dropdown) {
             const opt = document.createElement("option");
             opt.value = sectionId;
@@ -1832,35 +1885,47 @@
       modal.style.display = "none";
     }
 
-    function processCardPayment(e) {
+    async function processBankTransferOrder(e) {
       e.preventDefault();
 
       if (order.length === 0) {
-        alert("Your order is empty. Please add items before checking out.");
+        alert("Your order is empty. Please add items before submitting.");
         return;
       }
 
       const name = document.getElementById("card-name").value;
       const email = document.getElementById("card-email").value;
       const delivery = document.getElementById("delivery-info").value;
+      const receiptInput = document.getElementById("receipt-upload");
 
-      const totalAmount = order.reduce((sum, item) => sum + (item.price * item.qty), 0);
-      const orderSummary = order.map(item => `${item.qty}x ${item.name}`).join(", ");
-
-      if (totalAmount <= 0) {
-        alert("Invalid transaction amount.");
+      if (!receiptInput.files || receiptInput.files.length === 0) {
+        alert("Please upload your bank transfer payment receipt before submitting.");
         return;
       }
 
-      closePaymentModal();
+      const file = receiptInput.files[0];
+      const totalAmount = order.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
-      const returnUrl = encodeURIComponent("https://rizz23ultralounge.onrender.com/api/wipay-callback");
+      try {
+        await db.collection("customerOrders").add({
+          customerName: name,
+          email: email,
+          deliveryInfo: delivery,
+          items: order,
+          totalAmount: totalAmount,
+          receiptFileName: file.name,
+          paymentMethod: "Bank Transfer",
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
 
-      const baseUrl = WIPAY_ENVIRONMENT === "live" 
-        ? "https://jm.wipayfinancial.com/plugins/payments/pay" 
-        : "https://sandbox.wipayfinancial.com/plugins/payments/pay";
-
-      window.location.href = `${baseUrl}?account_id=${WIPAY_ACCOUNT_ID}&total=${totalAmount.toFixed(2)}&currency=JMD&name=${encodeURIComponent(orderSummary)}&customer_name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&note=${encodeURIComponent(delivery)}&return_url=${returnUrl}`;
+        alert("Thank you! Your order and bank transfer receipt have been submitted successfully. We will verify your payment shortly.");
+        order = [];
+        updateorderUI();
+        document.getElementById("card-checkout-form").reset();
+        closePaymentModal();
+      } catch (error) {
+        alert("Error submitting order: " + error.message);
+      }
     }
 
     async function openAdminModal() {
@@ -1996,7 +2061,7 @@
     }
 
     async function deleteMenuItem(id) {
-      if (confirm("Are you sure you want to remove this item from your live menu?")) {
+      if (confirm("Are you sure you want to delete this item?")) {
         try {
           if (id.startsWith("seed_")) {
             currentMenuItems = currentMenuItems.filter(i => i.id !== id);

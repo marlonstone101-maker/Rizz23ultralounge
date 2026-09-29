@@ -33,7 +33,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// Loyverse Order Endpoint
+// Loyverse Direct Order Endpoint
 app.post('/api/create-order', async (req, res) => {
   const { customerName, customerEmail, deliveryNotes, itemName, amount } = req.body;
 
@@ -85,7 +85,7 @@ app.post('/api/create-order', async (req, res) => {
   }
 });
 
-// Reservation Email Endpoint
+// Table Reservation Endpoint
 app.post('/api/reserve', async (req, res) => {
   const { name, email, date, time, guests } = req.body;
 
@@ -121,27 +121,32 @@ app.post('/api/reserve', async (req, res) => {
 // Unified route for Menu Orders and Reservations with Bank Transfer Receipt Upload
 app.post('/api/submit-order', upload.single('receipt'), async (req, res) => {
     try {
-        const { name, phone, orderType, orderDetails, totalAmount } = req.body;
+        const { name, email, customerEmail, phone, orderType, orderDetails, totalAmount } = req.body;
         const receiptFile = req.file;
+
+        // Support both req.body.email and req.body.customerEmail
+        const clientEmail = email || customerEmail;
 
         if (!receiptFile) {
             return res.status(400).json({ success: false, message: "Bank transfer receipt is required." });
         }
 
-        // 1. Send Email Notification via Nodemailer with Receipt Attached
-        const mailOptions = {
+        // 1. Send Email Notification to Restaurant Email with Receipt Attached
+        const adminMailOptions = {
             from: EMAIL_USER,
-            to: EMAIL_USER, // Lounge/owner email
-            subject: `New Paid [${orderType || 'Order'}] from ${name}`,
+            to: 'rizz23ultralounge@gmail.com', // Restaurant Email destination
+            replyTo: clientEmail || EMAIL_USER,
+            subject: `New Paid [${orderType || 'Order/Reservation'}] from ${name}`,
             html: `
                 <div style="font-family: Arial, sans-serif; color: #333;">
                     <h2 style="color: #b8860b;">New Order & Verified Bank Transfer</h2>
                     <p><strong>Customer Name:</strong> ${name}</p>
-                    <p><strong>Phone Number:</strong> ${phone}</p>
-                    <p><strong>Order Type:</strong> ${orderType || 'Standard Order'}</p>
+                    <p><strong>Customer Email:</strong> ${clientEmail || 'Not Provided'}</p>
+                    <p><strong>Phone Number:</strong> ${phone || 'N/A'}</p>
+                    <p><strong>Order Type:</strong> ${orderType || 'Standard Order / Reservation'}</p>
                     <p><strong>Details / Items:</strong> ${orderDetails}</p>
                     <p><strong>Total Amount:</strong> JMD $${totalAmount}</p>
-                    <p style="background: #f4f4f4; padding: 10px;"><em>Action Required: Please verify the attached bank transfer receipt against the bank account before fulfilling.</em></p>
+                    <p style="background: #f4f4f4; padding: 10px;"><em>Action Required: Please verify the attached bank transfer receipt image against your bank account before fulfilling.</em></p>
                 </div>
             `,
             attachments: [
@@ -152,14 +157,42 @@ app.post('/api/submit-order', upload.single('receipt'), async (req, res) => {
             ]
         };
 
-        await transporter.sendMail(mailOptions);
+        await transporter.sendMail(adminMailOptions);
 
-        // 2. Push Sale Record to Loyverse POS
+        // 2. Send Confirmation Email to Customer (if email provided)
+        if (clientEmail) {
+            const customerMailOptions = {
+                from: EMAIL_USER,
+                to: clientEmail,
+                subject: `Order & Reservation Confirmation - Rizz23 Ultra Lounge`,
+                html: `
+                    <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; padding: 20px; border-radius: 8px;">
+                        <h2 style="color: #b8860b; text-align: center;">Rizz23 Ultra Lounge</h2>
+                        <h3 style="border-bottom: 2px solid #b8860b; padding-bottom: 8px;">Order & Reservation Confirmation</h3>
+                        <p>Hi <strong>${name}</strong>,</p>
+                        <p>Thank you for choosing Rizz23 Ultra Lounge! We have received your submission along with your bank transfer receipt.</p>
+                        
+                        <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; margin: 15px 0;">
+                            <p style="margin: 5px 0;"><strong>Order Type:</strong> ${orderType || 'Standard Order / Reservation'}</p>
+                            <p style="margin: 5px 0;"><strong>Details:</strong> ${orderDetails}</p>
+                            <p style="margin: 5px 0;"><strong>Total Amount:</strong> JMD $${totalAmount}</p>
+                        </div>
+
+                        <p>Our team is currently verifying your payment. Once confirmed, we will process your reservation/order.</p>
+                        <p style="margin-top: 20px;">Warm regards,<br><strong>Rizz23 Ultra Lounge Team</strong></p>
+                    </div>
+                `
+            };
+
+            await transporter.sendMail(customerMailOptions);
+        }
+
+        // 3. Push Sale Record to Loyverse POS
         try {
             await axios.post('https://api.loyverse.com/v1.0/receipts', {
                 store_id: LOYVERSE_STORE_ID,
-                total_money: totalAmount,
-                note: `Online Order - ${name} (${phone})`
+                total_money: parseFloat(totalAmount) || 0,
+                note: `Online Order - ${name} (${phone || 'No phone'})`
             }, {
                 headers: {
                     'Authorization': `Bearer ${LOYVERSE_TOKEN}`,
