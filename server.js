@@ -4,7 +4,8 @@ const cors = require('cors');
 const axios = require('axios');
 const path = require('path');
 const nodemailer = require('nodemailer');
-
+const multer = require('multer');
+const upload = multer({ storage: multer.memoryStorage() }); 
 const app = express();
 
 // Middleware
@@ -20,9 +21,6 @@ const {
   LOYVERSE_PAYMENT_TYPE_ID,
   EMAIL_USER,
   EMAIL_PASS,
-  WIPAY_ACCOUNT_NUMBER,
-  WIPAY_API_KEY,
-  WIPAY_ENVIRONMENT = 'sandbox',
   PORT = 3000
 } = process.env;
 
@@ -120,54 +118,64 @@ app.post('/api/reserve', async (req, res) => {
   }
 });
 
-// WiPay Payment Endpoint
-app.post('/api/create-payment', async (req, res) => {
-  try {
-    const { amount, order_id, customer_email, phone } = req.body;
+// Unified route for Menu Orders and Reservations with Bank Transfer Receipt Upload
+app.post('/api/submit-order', upload.single('receipt'), async (req, res) => {
+    try {
+        const { name, phone, orderType, orderDetails, totalAmount } = req.body;
+        const receiptFile = req.file;
 
-    if (!amount || !order_id) {
-      return res.status(400).json({ success: false, message: 'Missing required amount or order_id.' });
+        if (!receiptFile) {
+            return res.status(400).json({ success: false, message: "Bank transfer receipt is required." });
+        }
+
+        // 1. Send Email Notification via Nodemailer with Receipt Attached
+        const mailOptions = {
+            from: EMAIL_USER,
+            to: EMAIL_USER, // Lounge/owner email
+            subject: `New Paid [${orderType || 'Order'}] from ${name}`,
+            html: `
+                <div style="font-family: Arial, sans-serif; color: #333;">
+                    <h2 style="color: #b8860b;">New Order & Verified Bank Transfer</h2>
+                    <p><strong>Customer Name:</strong> ${name}</p>
+                    <p><strong>Phone Number:</strong> ${phone}</p>
+                    <p><strong>Order Type:</strong> ${orderType || 'Standard Order'}</p>
+                    <p><strong>Details / Items:</strong> ${orderDetails}</p>
+                    <p><strong>Total Amount:</strong> JMD $${totalAmount}</p>
+                    <p style="background: #f4f4f4; padding: 10px;"><em>Action Required: Please verify the attached bank transfer receipt against the bank account before fulfilling.</em></p>
+                </div>
+            `,
+            attachments: [
+                {
+                    filename: receiptFile.originalname,
+                    content: receiptFile.buffer
+                }
+            ]
+        };
+
+        await transporter.sendMail(mailOptions);
+
+        // 2. Push Sale Record to Loyverse POS
+        try {
+            await axios.post('https://api.loyverse.com/v1.0/receipts', {
+                store_id: LOYVERSE_STORE_ID,
+                total_money: totalAmount,
+                note: `Online Order - ${name} (${phone})`
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${LOYVERSE_TOKEN}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (loyverseError) {
+            console.error("Loyverse POS sync warning:", loyverseError.message);
+        }
+
+        res.status(200).json({ success: true, message: "Order and receipt submitted successfully!" });
+
+    } catch (error) {
+        console.error("Server submission error:", error);
+        res.status(500).json({ success: false, message: "Failed to process order submission." });
     }
-
-    const parsedAmount = parseFloat(amount);
-    if (isNaN(parsedAmount)) {
-      return res.status(400).json({ success: false, message: 'Invalid amount format.' });
-    }
-
-    const formBody = new URLSearchParams({
-      account_number: WIPAY_ACCOUNT_NUMBER,
-      api_key: WIPAY_API_KEY,
-      environment: WIPAY_ENVIRONMENT,
-      country_code: 'JM',
-      currency: 'JMD',
-      fee_structure: 'customer_pay',
-      method: 'credit_card',
-      order_id: order_id,
-      origin: 'Rizz23UltraLounge',
-      response_url: 'https://rizz23ultralounge.com/payment-complete', 
-      total: parsedAmount.toFixed(2)
-    }).toString();
-
-    const wipayResponse = await fetch('https://jm.wipayfinancial.com/plugins/payments/request', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: formBody
-    });
-
-   const responseText = await wipayResponse.text();
-    console.log('Raw WiPay Response:', responseText);
-    const wipayData = JSON.parse(responseText);
-    
-    return res.status(200).json({
-        success: true,
-        redirect_url: wipayData.url || wipayData.payment_url,
-        order_id,
-        amount: parsedAmount.toFixed(2)
-    });
-  } catch (error) {
-    console.error('WiPay Payment Error:', error);
-    return res.status(500).json({ success: false, error: error.message });
-  }
 });
 
 // Serve Frontend

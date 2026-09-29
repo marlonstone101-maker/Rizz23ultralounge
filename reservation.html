@@ -33,7 +33,7 @@
       padding: 0;
     }
 
-   html, body {
+    html, body {
       width: 100%;
       max-width: 100vw;
       overflow-x: hidden;
@@ -195,7 +195,6 @@
       box-shadow: 0 10px 30px rgba(229, 228, 226, 0.15);
     }
 
-    /* Package Image Styling */
     .package-image-container {
       width: 100%;
       height: 200px;
@@ -512,7 +511,7 @@
     <h1 class="gold-text">Book Celebration</h1>
     <p>Experience fine dining & VIP celebration packages crafted for distinction</p>
     <div class="hours-badge">
-    &nbsp; Dinner Hours: 6:00 PM – 12:00 AM
+      Dinner Hours: 6:00 PM – 12:00 AM
     </div>
   </section>
 
@@ -520,7 +519,7 @@
 
     <!-- Packages Showcase -->
     <div>
-      <h2 class="packages-title gold-text">Birthdays Wedding Reception Baby Shower & Venue Rental</h2>
+      <h2 class="packages-title gold-text">Birthdays, Wedding Receptions, Baby Showers & Venue Rental</h2>
       
       <div class="packages-grid">
 
@@ -619,7 +618,7 @@
         <h2 class="form-title gold-text">Reserve Your Slot</h2>
       </div>
 
-      <form id="reservation-form" onsubmit="handleReservationSubmit(event)">
+      <form id="reservation-form" enctype="multipart/form-data" onsubmit="handleReservationSubmit(event)">
         
         <!-- Guest Details -->
         <div class="form-group">
@@ -733,7 +732,13 @@
           <textarea id="res-notes" class="form-control" rows="3" placeholder="Birthday name, cake message, dietary preferences..."></textarea>
         </div>
 
-        <button type="submit" id="submit-btn" class="btn-gold">Pay 50% Deposit ($0 JMD) via WiPay</button>
+        <!-- Bank Transfer Receipt Upload Field -->
+        <div class="form-group">
+          <label for="receipt">Upload Bank Transfer Deposit Receipt</label>
+          <input type="file" id="receipt" class="form-control" accept="image/*,.pdf" required />
+        </div>
+
+        <button type="submit" id="submit-btn" class="btn-gold">Submit Reservation & Receipt</button>
       </form>
     </div>
 
@@ -742,7 +747,7 @@
   <!-- Image Lightbox Modal -->
   <div id="image-modal" class="image-modal" onclick="closeImageModal()">
     <span class="image-modal-close" onclick="closeImageModal()">&times;</span>
-    <img class="image-modal-content" id="modal-img">
+    <img class="image-modal-content" id="modal-img" alt="Enlarged package preview">
   </div>
 
   <!-- Footer -->
@@ -780,7 +785,7 @@
 
       const submitBtn = document.getElementById('submit-btn');
       if (calculatedDepositAmount > 0) {
-        submitBtn.innerText = `Pay 50% Deposit ($${calculatedDepositAmount.toLocaleString()} JMD) via WiPay`;
+        submitBtn.innerText = `Submit Reservation (50% Deposit: $${calculatedDepositAmount.toLocaleString()} JMD)`;
       } else {
         submitBtn.innerText = "Submit Reservation Request";
       }
@@ -791,51 +796,59 @@
 
       const submitBtn = document.getElementById('submit-btn');
       const originalText = submitBtn.innerText;
-      submitBtn.innerText = "Redirecting to WiPay...";
+      submitBtn.innerText = "Submitting Reservation...";
       submitBtn.disabled = true;
 
-      const formData = {
-        fullName: document.getElementById('res-name').value,
-        email: document.getElementById('res-email').value,
-        phone: document.getElementById('res-phone').value,
-        date: document.getElementById('res-date').value,
-        timeSlot: document.getElementById('res-time').value,
-        package: document.getElementById('res-package').value,
-        guests: document.getElementById('res-guests').value,
-        primaryColor: document.getElementById('res-color-1').value,
-        secondaryColor: document.getElementById('res-color-2').value,
-        customColorRequest: document.getElementById('res-color-special').value,
-        addPhotographer: document.getElementById('res-photo').checked,
-        specialRequests: document.getElementById('res-notes').value,
-        depositAmount: calculatedDepositAmount
-      };
+      const receiptInput = document.getElementById('receipt');
+      const receiptFile = receiptInput ? receiptInput.files[0] : null;
+
+      if (!receiptFile && calculatedDepositAmount > 0) {
+        alert("Please upload your bank transfer deposit receipt before submitting.");
+        submitBtn.innerText = originalText;
+        submitBtn.disabled = false;
+        return;
+      }
+
+      const name = document.getElementById('res-name').value;
+      const phone = document.getElementById('res-phone').value;
+      const date = document.getElementById('res-date').value;
+      const time = document.getElementById('res-time').value;
+      const guests = document.getElementById('res-guests').value;
+      const pkg = document.getElementById('res-package').value;
+      const color1 = document.getElementById('res-color-1').value;
+      const color2 = document.getElementById('res-color-2').value;
+      const specialColor = document.getElementById('res-color-special').value;
+      const notes = document.getElementById('res-notes').value;
+
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('phone', phone);
+      formData.append('orderType', 'VIP Reservation');
+      formData.append('orderDetails', `Date: ${date}, Time: ${time}, Guests: ${guests}, Package: ${pkg}, Colors: ${color1}/${color2} (${specialColor}), Notes: ${notes}`);
+      formData.append('totalAmount', calculatedDepositAmount || 0);
+      
+      if (receiptFile) {
+        formData.append('receipt', receiptFile);
+      }
 
       try {
-        const response = await fetch('https://rizz23ultralounge.onrender.com/api/create-payment', {
+        const response = await fetch('/api/submit-order', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            amount: calculatedDepositAmount,
-            order_id: 'RES-' + Date.now(),
-            customer_email: formData.email,
-            phone: formData.phone,
-            details: formData
-          })
+          body: formData
         });
 
         const result = await response.json();
-
-        if (result.redirect_url) {
-          window.location.href = result.redirect_url;
-          return;
+        if (result.success) {
+          alert("Success! Your reservation and bank transfer receipt have been submitted.");
+          window.location.reload();
         } else {
-          alert('Error: ' + result.message || 'Failed to initialize payment.');
+          alert("Error: " + (result.message || "Failed to submit reservation."));
+          submitBtn.innerText = originalText;
+          submitBtn.disabled = false;
         }
-
-      } catch (error) {
-        console.error('Error submitting reservation:', error);
-        alert('Network error occurred. Please check your connection or contact us directly at (876) 229-8555.');
-      } finally {
+      } catch (err) {
+        console.error("Submission error:", err);
+        alert("A network error occurred. Please check your connection and try again.");
         submitBtn.innerText = originalText;
         submitBtn.disabled = false;
       }
